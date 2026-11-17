@@ -10,8 +10,9 @@ classes:            # ordre fixé pour tout le projet (index 0, 1, 2)
   - peacock_spot
 
 donnees:
-  raw: data/raw
-  splits: data/preprocessing/splits.csv
+  raw: data/raw                         # data/raw/uguz/... et data/raw/zeytin/...
+  splits: data/preprocessing/splits.csv # chemins relatifs à data/raw
+  images_preparees: data/processed/images_224.npy
   sources:
     uguz:
       kaggle: habibulbasher01644/olive-leaf-image-dataset
@@ -24,7 +25,7 @@ donnees:
     aculus_olearius: aculus
     olive_peacock_spot: peacock_spot
     "sağlam": healthy
-    "hastalıklı": aculus     # en réalité de l'œil de paon (voir notebook, section 8)
+    "hastalıklı": malade     # évalué en binaire ; en réalité de l'œil de paon (notebook, section 8)
 
 pretraitement:
   taille_image: 224
@@ -45,6 +46,8 @@ modele_deploye:
 
 suivi:
   mlflow_uri: sqlite:///mlflow.db
-  experience: olive-disease
+  experience: olive-disease             # runs historiques du notebook Kaggle (métriques seules)
+  experience_pipeline: olive-disease-pipeline   # runs lancés par src/models/train.py
+  dossier_artefacts: mlartifacts
 
 resultats: Resultats
