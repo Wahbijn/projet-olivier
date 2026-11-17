@@ -1,0 +1,76 @@
+# Pipeline reproductible : `dvc repro` relance uniquement les étapes dont une dépendance a changé
+# (code, données, configs/param.yaml). Voir README, section « Pipeline ».
+#
+#   data/raw + splits.csv ─► preparation ─► entrainement@<modele> ─► evaluation ─► model_V1.pt/.onnx
+#
+# Le découpage (data/preprocessing/splits.csv) est la référence versionnée dans Git ;
+# il ne se régénère qu'explicitement : python -m src.data.preprocessing --regenerer
+
+stages:
+  preparation:
+    cmd: python -m src.features.feature_extraction
+    deps:
+      - src/features/feature_extraction.py
+      - data/raw
+      - data/preprocessing/splits.csv
+    params:
+      - configs/config.yaml:
+          - pretraitement.taille_image
+    outs:
+      - data/processed/images_224.npy
+
+  entrainement:
+    foreach:
+      - resnet50_baseline
+      - efficientnet_b0_lr1e-4
+      - efficientnet_b0_lr3e-4
+      - efficientnet_b0_augfort
+    do:
+      cmd: python -m src.models.train --modele ${item}
+      deps:
+        - src/models/train.py
+        - src/models/architectures.py
+        - src/features/feature_extraction.py
+        - data/processed/images_224.npy
+        - data/preprocessing/splits.csv
+      params:
+        - configs/param.yaml:
+            - modeles.${item}
+            - entrainement
+            - augmentation
+            - decoupage.seed
+      outs:
+        - models/${item}.pt
+        - Resultats/historique_${item}.csv:
+            cache: false
+
+  evaluation:
+    cmd: python -m src.models.test
+    deps:
+      - src/models/test.py
+      - data/processed/images_224.npy
+      - data/preprocessing/splits.csv
+      - models/resnet50_baseline.pt
+      - models/efficientnet_b0_lr1e-4.pt
+      - models/efficientnet_b0_lr3e-4.pt
+      - models/efficientnet_b0_augfort.pt
+    params:
+      - configs/config.yaml:
+          - modele_deploye.seuil_confiance
+    outs:
+      - models/model_V1.pt
+      - models/model_V1.onnx
+      - Resultats/comparaison_modeles.csv:
+          cache: false
+      - Resultats/bilan_drift.csv:
+          cache: false
+      - Resultats/seuils_confiance.csv:
+          cache: false
+    metrics:
+      - Resultats/metriques.json:
+          cache: false
+    plots:
+      - Resultats/matrices_confusion_test.png:
+          cache: false
+      - Resultats/drift_ks.png:
+          cache: false

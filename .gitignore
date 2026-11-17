@@ -6,11 +6,12 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Données et modèles (gérés par DVC, pas par Git)
-data/raw/*
-!data/raw/.gitkeep
+data/raw/
+data/processed/
 models/*.pt
 models/*.onnx
 mlartifacts/
+mlruns/
 
 # Divers
 .vscode/
