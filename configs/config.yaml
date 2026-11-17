@@ -1,0 +1,50 @@
+# Configuration générale du projet (chemins, classes, prétraitement, déploiement)
+
+projet:
+  nom: projet-olivier
+  description: Détection de maladies de l'olivier à partir de photos de feuilles
+
+classes:            # ordre fixé pour tout le projet (index 0, 1, 2)
+  - healthy
+  - aculus
+  - peacock_spot
+
+donnees:
+  raw: data/raw
+  splits: data/preprocessing/splits.csv
+  sources:
+    uguz:
+      kaggle: habibulbasher01644/olive-leaf-image-dataset
+      role: entrainement / validation / test
+    zeytin:
+      kaggle: serhathoca/zeytin
+      role: test externe (drift), evalue en binaire sain / malade
+  correspondance_classes:   # nom du dossier d'origine -> classe harmonisée
+    Healthy: healthy
+    aculus_olearius: aculus
+    olive_peacock_spot: peacock_spot
+    "sağlam": healthy
+    "hastalıklı": aculus     # en réalité de l'œil de paon (voir notebook, section 8)
+
+pretraitement:
+  taille_image: 224
+  padding: mediane des 5 premieres et 5 dernieres lignes de pixels
+  normalisation:            # statistiques ImageNet
+    moyenne: [0.485, 0.456, 0.406]
+    ecart_type: [0.229, 0.224, 0.225]
+
+dedoublonnage:
+  methode: dHash 16x16 (256 bits)
+  seuil_distance: 10
+
+modele_deploye:
+  architecture: resnet50
+  pytorch: models/model_V1.pt
+  onnx: models/model_V1.onnx
+  seuil_confiance: 0.8      # en dessous : reponse "incertain"
+
+suivi:
+  mlflow_uri: sqlite:///mlflow.db
+  experience: olive-disease
+
+resultats: Resultats

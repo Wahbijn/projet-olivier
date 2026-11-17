@@ -1,0 +1,25 @@
+# --- Données et calcul ---
+numpy
+pandas
+pillow
+scikit-learn
+scipy
+matplotlib
+pyyaml
+
+# --- Deep Learning ---
+torch
+torchvision
+onnxruntime
+
+# --- Suivi des expériences et versionnement ---
+mlflow
+dvc
+
+# --- API (prochaine étape) ---
+fastapi
+uvicorn
+python-multipart
+
+# --- Tests ---
+pytest

@@ -1,0 +1,45 @@
+# Hyperparamètres d'entraînement (valeurs utilisées dans notebooks/analysis.ipynb)
+
+decoupage:
+  train: 0.70
+  val: 0.15
+  test: 0.15
+  stratifie: true
+  seed: 42
+
+entrainement:
+  batch_size: 32
+  optimiseur: AdamW
+  perte: cross_entropy
+  precision_mixte: true
+  metrique_selection: f1_macro_val
+
+augmentation:
+  random_resized_crop_scale: [0.8, 1.0]
+  flip_horizontal: true
+  flip_vertical: true
+  color_jitter_standard: {brightness: 0.2, contrast: 0.2, saturation: 0.2}
+  color_jitter_renforce: {brightness: 0.5, contrast: 0.5, saturation: 0.3, hue: 0.03}
+
+modeles:
+  resnet50_baseline:
+    lr: 1.0e-4
+    epochs_max: 15
+    patience: 4
+    color_jitter: standard
+    deploye: true
+  efficientnet_b0_lr1e-4:
+    lr: 1.0e-4
+    epochs_max: 15
+    patience: 4
+    color_jitter: standard
+  efficientnet_b0_lr3e-4:
+    lr: 3.0e-4
+    epochs_max: 20
+    patience: 6
+    color_jitter: standard
+  efficientnet_b0_augfort:
+    lr: 3.0e-4
+    epochs_max: 20
+    patience: 6
+    color_jitter: renforce
