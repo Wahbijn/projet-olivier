@@ -1,0 +1,24 @@
+.vide {
+  height: 100%;
+  min-height: 160px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.8rem;
+  text-align: center;
+  color: var(--sage-400);
+  padding: 1.5rem;
+  border: 2px dashed var(--sand-300);
+  border-radius: var(--radius);
+  background: rgb(255 253 248 / 55%);
+}
+
+.vide p {
+  color: var(--ink-soft);
+  font-family: var(--font-titre);
+  font-size: 1.1rem;
+}
+
+html[lang='ar'] .vide p {
+  font-family: var(--font-ar);
+}

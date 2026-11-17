@@ -6,6 +6,8 @@ scikit-learn
 scipy
 matplotlib
 pyyaml
+httpx2
+
 
 # --- Deep Learning ---
 torch

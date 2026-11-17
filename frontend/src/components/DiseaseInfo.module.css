@@ -1,0 +1,70 @@
+.fiche {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--white);
+  border: 1px solid var(--sand-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.avertissement {
+  background: var(--ochre-soft);
+  color: #4a3200;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.onglets {
+  display: flex;
+  border-bottom: 2px solid var(--sand-200);
+}
+
+.onglet {
+  flex: 1;
+  min-height: 44px;
+  padding: 0.4rem 0.5rem;
+  border: 0;
+  border-bottom: 4px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.onglet:hover {
+  background: var(--sage-100);
+}
+
+.actif {
+  color: var(--olive-800);
+  border-bottom-color: var(--terracotta);
+}
+
+.onglet:focus-visible {
+  outline-offset: -3px;
+}
+
+/* Le panneau défile en interne s'il déborde */
+.panneau {
+  padding: 0.8rem 1rem 1rem;
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+  font-size: 0.95rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sage-400) transparent;
+}
+
+.panneau ul {
+  margin: 0;
+  padding-inline-start: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+}

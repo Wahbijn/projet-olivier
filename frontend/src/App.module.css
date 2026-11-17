@@ -1,0 +1,395 @@
+/* =====================================================================
+   Mobile d'abord : parcours vertical. Les colonnes « disparaissent »
+   (display: contents) et les blocs sont réordonnés avec `order`.
+   ===================================================================== */
+.evitement {
+  position: absolute;
+  inset-inline-start: 0.5rem;
+  top: -4rem;
+  background: var(--olive-800);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.evitement:focus {
+  top: 0.5rem;
+}
+
+.entete {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--olive-800), var(--olive-700));
+  color: var(--sand-100);
+  padding: 0.8rem 1rem 2.2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 6px solid var(--terracotta);
+}
+
+.barre {
+  order: -1; /* la pastille et la langue restent en haut sur mobile */
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.marque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.langue {
+  min-height: 44px;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  border: 2px solid var(--sand-100);
+  background: transparent;
+  color: var(--sand-100);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.langue:hover {
+  background: rgb(247 241 229 / 15%);
+}
+
+.langue:focus-visible {
+  outline-color: var(--ochre-soft);
+}
+
+.branche {
+  width: min(260px, 60%);
+  color: var(--sage-400);
+  margin: 0.2rem auto 0;
+  display: block;
+  animation: balancement 7s ease-in-out infinite;
+  transform-origin: 5% 90%;
+}
+
+@keyframes balancement {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+
+.nom {
+  font-size: clamp(2.6rem, 11vw, 4rem);
+  color: var(--sand-100);
+  letter-spacing: 0.02em;
+}
+
+.slogan {
+  margin-top: 0.4rem;
+  font-size: 1.1rem;
+  color: var(--sage-200);
+}
+
+.principal {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.colGauche,
+.colCentre {
+  display: contents;
+}
+
+/* Ordre du parcours mobile : conseils, envoi, résultat, heatmap, fiche, nouvelle analyse, historique */
+.conseils { order: 10; }
+.envoi { order: 20; }
+.resultat { order: 30; scroll-margin-top: 1rem; }
+.colDroite { order: 40; }
+.fiche { order: 50; }
+.nouvelle { order: 60; align-self: center; }
+.historique { order: 70; }
+
+/* Les états vides n'ont d'intérêt que sur ordinateur */
+.etatVide {
+  display: none;
+}
+
+.conseils {
+  background: var(--ochre-soft);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.1rem;
+  color: #3d2a00;
+}
+
+.conseils h2 {
+  font-size: 1.2rem;
+  color: #3d2a00;
+  margin-bottom: 0.6rem;
+}
+
+.conseils ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.conseils li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.conseils li span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.colDroite {
+  background: var(--white);
+  border: 1px solid var(--sand-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.titrePanneau {
+  font-size: 1.2rem;
+}
+
+.pied {
+  background: var(--olive-900);
+  color: var(--sand-200);
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+  font-size: 0.95rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.avertissement {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* =====================================================================
+   Ordinateur (≥ 1024 px) : tableau de bord en 3 colonnes, sans défilement
+   de la page. Un panneau qui déborde défile en interne.
+   ===================================================================== */
+@media (min-width: 1024px) {
+  .app {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+  }
+
+  /* --- En-tête compact sur une ligne --- */
+  .entete {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1.25rem;
+    height: 66px;
+    text-align: start;
+    border-bottom-width: 4px;
+  }
+
+  .marque {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .barre {
+    order: 0;
+    width: auto;
+    margin: 0;
+    flex: none;
+    gap: 0.8rem;
+  }
+
+  .branche {
+    width: 74px;
+    margin: 0;
+    flex: none;
+  }
+
+  .nom {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .slogan {
+    margin: 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-inline-start: 0.9rem;
+    border-inline-start: 1px solid rgb(247 241 229 / 35%);
+  }
+
+  /* --- Trois colonnes 28 / 36 / 36 (l'ordre s'inverse tout seul en RTL) --- */
+  .principal {
+    max-width: none;
+    margin: 0;
+    padding: 0.9rem 1.25rem;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 28fr) minmax(0, 36fr) minmax(0, 36fr);
+    gap: 1rem;
+  }
+
+  .colGauche,
+  .colCentre,
+  .colDroite {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .colGauche {
+    gap: 0.7rem;
+  }
+
+  .colCentre {
+    gap: 0.8rem;
+    overflow: auto; /* défilement interne discret si le contenu déborde */
+    scrollbar-width: thin;
+    scrollbar-color: var(--sage-400) transparent;
+    padding-inline-end: 2px;
+  }
+
+  .colDroite {
+    padding: 0.9rem 1rem;
+    gap: 0.6rem;
+    display: flex;
+  }
+
+  .titrePanneau {
+    font-size: 1.15rem;
+    flex: none;
+  }
+
+  .corpsPanneau {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Réinitialise les ordres mobiles */
+  .conseils,
+  .envoi,
+  .resultat,
+  .fiche,
+  .nouvelle,
+  .historique {
+    order: 0;
+  }
+
+  .nouvelle {
+    align-self: stretch;
+    min-height: 40px;
+    padding-block: 0.2rem;
+    font-size: 0.95rem;
+    flex: none;
+  }
+
+  .envoi {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .conseils {
+    flex: none;
+    padding: 0.6rem 0.8rem 0.7rem;
+  }
+
+  .conseils h2 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .conseils ol {
+    gap: 0.3rem;
+  }
+
+  .conseils li {
+    font-size: 0.875rem;
+    line-height: 1.3;
+    gap: 0.55rem;
+  }
+
+  .conseils li span {
+    width: 22px;
+    height: 22px;
+    font-size: 0.875rem;
+  }
+
+  .historique {
+    flex: none;
+    min-width: 0;
+  }
+
+  .resultat {
+    flex: none;
+  }
+
+  /* La fiche prend la place restante sous la carte (au moins 190 px) */
+  .fiche {
+    flex: 1 0 190px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .fiche > section {
+    flex: 1;
+  }
+
+  /* États vides : visibles sur ordinateur, ils remplissent le panneau */
+  .etatVide {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .colCentre > .etatVide {
+    flex: 1;
+  }
+
+  /* Pied de page : une seule ligne fine */
+  .pied {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .pied p {
+    white-space: nowrap;
+  }
+}

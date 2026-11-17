@@ -1,0 +1,129 @@
+.bloc {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.zone {
+  display: grid;
+  place-items: center;
+}
+
+.comparateur {
+  position: relative;
+  width: min(100%, 360px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--sand-300);
+  background: var(--sand-200);
+  touch-action: pan-y;
+}
+
+.comparateur:focus-within {
+  outline: 3px solid var(--terracotta);
+  outline-offset: 3px;
+}
+
+.img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.etiquette {
+  position: absolute;
+  top: 8px;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: rgb(31 36 23 / 78%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.gauche { left: 8px; }
+.droite { right: 8px; }
+
+.poignee {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--white);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 35%);
+  pointer-events: none;
+}
+
+.bouton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--olive-800);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 35%);
+}
+
+/* Le champ couvre toute la zone, invisible, pour capter toucher et clavier */
+.range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.legende {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+/* Petit dégradé bleu → rouge rappelant l'échelle de la heatmap */
+.degrade {
+  flex: none;
+  width: 44px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2c4f9e, #3ba17c, #e8d23a, #d92b1d);
+}
+
+.absente {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* ===== Ordinateur : le comparateur occupe toute la hauteur disponible (carré) ===== */
+@media (min-width: 1024px) {
+  .bloc {
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .zone {
+    min-height: 0;
+    container-type: size;
+  }
+
+  .comparateur {
+    width: min(100cqw, 100cqh);
+    max-width: none;
+  }
+}

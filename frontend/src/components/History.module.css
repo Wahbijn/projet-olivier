@@ -1,0 +1,109 @@
+.historique {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.titre {
+  font-size: 1.25rem;
+}
+
+.liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.vignette {
+  position: relative;
+  display: block;
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  border: 3px solid var(--couleur);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--sand-200);
+  transition: transform 0.15s;
+}
+
+.vignette:hover {
+  transform: translateY(-2px);
+}
+
+.vignette img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.active {
+  box-shadow: 0 0 0 3px var(--white), 0 0 0 6px var(--couleur);
+}
+
+.etiquette {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  background: var(--couleur);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 2px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vide,
+.note {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* ===== Ordinateur : bande horizontale de vignettes ===== */
+@media (min-width: 1024px) {
+  .historique {
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .titre {
+    font-size: 1rem;
+  }
+
+  .liste {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 4px 4px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sage-400) transparent;
+  }
+
+  .liste li {
+    flex: none;
+  }
+
+  .vignette {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+  }
+
+  .vide {
+    font-size: 0.875rem;
+  }
+
+  .note {
+    display: none;
+  }
+
+  /* Sur vignette de 64 px, l'étiquette serait trop petite : la bordure colorée + l'info-bulle suffisent */
+  .etiquette {
+    display: none;
+  }
+}

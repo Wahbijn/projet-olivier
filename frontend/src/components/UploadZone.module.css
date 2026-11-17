@@ -1,0 +1,191 @@
+.carte {
+  background: var(--white);
+  border: 1px solid var(--sand-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.zone {
+  border: 2.5px dashed var(--sage-400);
+  border-radius: 14px;
+  background: var(--sage-100);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.survol {
+  background: var(--sage-200);
+  border-color: var(--olive-700);
+}
+
+.avecApercu {
+  border-style: solid;
+  border-color: var(--sand-300);
+  background: var(--sand-200);
+}
+
+.invite {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  text-align: center;
+  color: var(--olive-700);
+}
+
+.titre {
+  font-family: var(--font-titre);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--olive-800);
+}
+
+.aide {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.cadre {
+  position: relative;
+  width: min(100%, 360px);
+}
+
+.apercu {
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--sand-200);
+}
+
+.voile {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(247 241 229 / 80%);
+  border-radius: 10px;
+  color: var(--olive-700);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+/* Le bouton « Prendre une photo » n'a de sens que sur écran tactile */
+.camera {
+  display: none;
+}
+
+@media (pointer: coarse), (max-width: 640px) {
+  .camera {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 560px) and (pointer: coarse) {
+  .actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.erreur {
+  background: var(--terracotta-soft);
+  border-inline-start: 5px solid var(--terracotta);
+  color: #5a1f0b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.analyser {
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.attente {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* ===== Ordinateur : la carte remplit sa colonne, l'aperçu s'adapte à la hauteur disponible ===== */
+@media (min-width: 1024px) {
+  .carte {
+    height: 100%;
+    min-height: 0;
+    padding: 0.8rem;
+    gap: 0.6rem;
+    grid-template-rows: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+
+  .zone {
+    min-height: 120px;
+    padding: 0.5rem;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Aperçu : occupe exactement la zone (image positionnée en absolu, jamais de débordement) */
+  .zone {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .cadre {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .apercu {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .voile {
+    inset: 0;
+  }
+
+  /* Boutons côte à côte, plus bas, pour laisser la place à l'aperçu */
+  .actions {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .actions :global(.btn),
+  .analyser {
+    min-height: 44px;
+    padding: 0.35rem 0.8rem;
+    font-size: 1rem;
+  }
+
+  .invite svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .titre {
+    font-size: 1.1rem;
+  }
+
+  .aide {
+    font-size: 0.875rem;
+  }
+
+  .attente {
+    font-size: 0.875rem;
+  }
+}
