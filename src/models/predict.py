@@ -1,39 +1,21 @@
 """Prédiction sur une photo de feuille d'olivier, avec heatmap Grad-CAM.
 
-Le prétraitement est identique à celui du notebook (section 5) :
-padding carré avec la couleur du fond, redimensionnement en 224x224, normalisation ImageNet.
+Le prétraitement est importé de src/features/feature_extraction.py : c'est exactement
+le même code qu'à l'entraînement (padding carré couleur du fond, 224x224, normalisation ImageNet).
 """
 import base64
 import io
 import threading
-from pathlib import Path
 
 import matplotlib
 import numpy as np
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-import yaml
-from PIL import Image, ImageOps
-from torchvision import models
+from PIL import Image
 
-RACINE = Path(__file__).resolve().parents[2]      # dossier projet-olivier
-
-
-def charger_config(chemin=RACINE / "configs" / "config.yaml"):
-    with open(chemin, encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-
-def preparer_image(img: Image.Image, taille: int = 224) -> np.ndarray:
-    """Rend l'image carrée (padding couleur du fond) puis la met en taille x taille."""
-    img = img.convert("RGB")
-    a = np.asarray(img)
-    # couleur du fond = médiane des 5 premières et 5 dernières lignes de pixels
-    bord = np.concatenate([a[:5].reshape(-1, 3), a[-5:].reshape(-1, 3)])
-    couleur = tuple(int(v) for v in np.median(bord, axis=0))
-    img = ImageOps.pad(img, (taille, taille), color=couleur, method=Image.BILINEAR)
-    return np.asarray(img, dtype=np.uint8)
+from src.features.feature_extraction import preparer_image  # noqa: F401  (réexporté pour l'API)
+from src.models.architectures import couche_gradcam, creer_modele
+from src.utils import RACINE, charger_config
 
 
 def image_en_base64(tableau: np.ndarray) -> str:
@@ -58,8 +40,7 @@ class Predicteur:
         self.ecart = torch.tensor(ckpt["ecart"]).view(3, 1, 1)
         self.seuil = float(infos.get("seuil_confiance", ckpt["seuil_confiance"]))
 
-        modele = models.resnet50()
-        modele.fc = nn.Linear(modele.fc.in_features, len(self.classes))
+        modele = creer_modele(self.architecture, len(self.classes), pretrained=False)
         modele.load_state_dict(ckpt["state_dict"])
         modele.eval()
         for p in modele.parameters():           # pas besoin de gradients sur les poids
@@ -68,7 +49,7 @@ class Predicteur:
 
         # "Micro" Grad-CAM sur la dernière couche convolutive
         self._activations, self._gradients = None, None
-        modele.layer4[-1].register_forward_hook(self._garder)
+        couche_gradcam(modele, self.architecture).register_forward_hook(self._garder)
         self._verrou = threading.Lock()          # une prédiction à la fois (les hooks gardent un état)
 
     def _garder(self, module, entree, sortie):
