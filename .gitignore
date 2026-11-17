@@ -1,21 +1,27 @@
-# Environnement Python
-venv/
+﻿# Environnement Python
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Jupyter
 .ipynb_checkpoints/
 
-# Données et modèles (gérés par DVC, pas par Git)
-data/raw/*
-!data/raw/.gitkeep
-models/*.pt
-models/*.onnx
-mlartifacts/
+# Variables d'environnement et secrets
+.env
+.env.*
+!.env.example
 
-# Divers
+# Configuration locale
 .vscode/
-.DS_Store
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.env.local
+
+# Fichiers temporaires et tests
+*.log
+.pytest_cache/
+.mypy_cache/
+
+# MLflow
+mlruns/
+
+# Cache DVC
+.dvc/cache/

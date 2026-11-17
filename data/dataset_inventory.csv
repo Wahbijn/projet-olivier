@@ -1,0 +1,2 @@
+﻿source_id,dataset_name,task,classes,image_count,license,source_url,status,notes
+SOURCE_A,Kaggle_Zeytin,classification,"healthy;peacock_spot",954,To_verify,https://www.kaggle.com/datasets/serhathoca/zeytin,downloaded,"572 healthy; 382 peacock spot"

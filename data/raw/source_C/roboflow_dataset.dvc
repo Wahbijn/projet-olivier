@@ -1,0 +1,6 @@
+outs:
+- md5: d188c193d2853da2ea9127d7490574e3.dir
+  size: 74391899
+  nfiles: 3649
+  hash: md5
+  path: roboflow_dataset
