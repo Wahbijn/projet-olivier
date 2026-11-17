@@ -1,0 +1,4 @@
+modèle,F1 macro test Uğuz (3 classes),acc binaire Zeytin,F1 binaire Zeytin,faux malades (/572),malades manqués (/382),confiance moy. Zeytin
+ResNet50,0.974,0.922,0.91,66,8,0.918
+EfficientNet-B0,0.985,0.795,0.794,192,4,0.876
+EfficientNet-B0 aug+,0.969,0.894,0.882,98,3,0.901

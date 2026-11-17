@@ -1,0 +1,16 @@
+# Environnement Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Données et modèles (gérés par DVC, pas par Git)
+data/raw/
+models/*.pt
+models/*.onnx
+mlartifacts/
+
+# Divers
+.vscode/
+.DS_Store
