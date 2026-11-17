@@ -1,27 +1,30 @@
-# --- Données et calcul ---
-numpy
-pandas
-pillow
-scikit-learn
-scipy
-matplotlib
-pyyaml
-httpx2
+# Python 3.10 ou plus récent.
+# PyTorch avec GPU : installer d'abord torch/torchvision depuis https://pytorch.org/get-started/locally/
 
+# --- Données et calcul ---
+numpy>=1.26
+pandas>=2.1
+pillow>=10.0
+scikit-learn>=1.4
+scipy>=1.11
+matplotlib>=3.8
+pyyaml>=6.0
 
 # --- Deep Learning ---
-torch
-torchvision
-onnxruntime
+torch>=2.3
+torchvision>=0.18
+onnx>=1.16              # export ONNX (src/models/test.py)
+onnxruntime>=1.18
 
 # --- Suivi des expériences et versionnement ---
-mlflow
-dvc
+mlflow>=2.14
+dvc>=3.50
 
-# --- API (prochaine étape) ---
-fastapi
-uvicorn
-python-multipart
+# --- API ---
+fastapi>=0.111
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
 
 # --- Tests ---
-pytest
+pytest>=8.0
+httpx>=0.27             # requis par fastapi.testclient
