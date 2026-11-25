@@ -205,3 +205,28 @@ def test_api_ask_502_si_le_llm_tombe(client, assistant):
 def test_api_rag_health_pret(client):
     d = client.get("/rag/health").json()
     assert d["pret"] is True and d["passages"] > 0 and d["embeddings"].startswith("hachage")
+
+
+# ---------- Groq ----------
+def test_groq_sans_cle_leve_une_erreur_claire(monkeypatch):
+    from src.rag.llm import ErreurLLM, creer_llm
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    with pytest.raises(ErreurLLM, match="GROQ_API_KEY"):
+        creer_llm({"fournisseur": "groq", "groq": {"modele": "x"}})
+
+
+def test_groq_lit_la_reponse(monkeypatch):
+    import httpx
+    from src.rag.llm import creer_llm
+    monkeypatch.setenv("GROQ_API_KEY", "gsk_test")
+    vu = {}
+
+    def faux_post(url, json, timeout, headers):
+        vu.update(url=url, auth=headers["Authorization"], modele=json["model"])
+        return httpx.Response(200, json={"choices": [{"message": {"content": " Bonjour [1] "}}]},
+                              request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(httpx, "post", faux_post)
+    llm = creer_llm({"fournisseur": "groq", "groq": {"modele": "m"}})
+    assert llm.generer("s", "u") == "Bonjour [1]"
+    assert vu["url"].endswith("/chat/completions") and vu["auth"] == "Bearer gsk_test"
