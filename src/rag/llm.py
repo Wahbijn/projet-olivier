@@ -39,24 +39,34 @@ class LLMAnthropic(LLM):
         return texte
 
 
-class LLMOllama(LLM):
-    def __init__(self, url: str, modele: str, temperature: float = 0.2, delai: float = 60):
-        self.url, self.modele, self.temperature, self.delai = url.rstrip("/"), modele, temperature, delai
+class LLMGroq(LLM):
+    """Groq : API compatible OpenAI (https://console.groq.com). Clé dans la variable GROQ_API_KEY."""
+
+    def __init__(self, modele: str, max_tokens: int = 700, temperature: float = 0.2, delai: float = 60,
+                 url: str = "https://api.groq.com/openai/v1"):
+        cle = os.environ.get("GROQ_API_KEY")
+        if not cle:
+            raise ErreurLLM("Variable d'environnement GROQ_API_KEY absente.")
+        self._cle, self.url = cle, url.rstrip("/")
+        self.modele, self.max_tokens, self.temperature, self.delai = modele, max_tokens, temperature, delai
 
     def generer(self, systeme, utilisateur):
         import httpx
         corps = {
             "model": self.modele,
-            "stream": False,
-            "options": {"temperature": self.temperature},
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
             "messages": [{"role": "system", "content": systeme}, {"role": "user", "content": utilisateur}],
         }
         try:
-            rep = httpx.post(f"{self.url}/api/chat", json=corps, timeout=self.delai)
+            rep = httpx.post(f"{self.url}/chat/completions", json=corps, timeout=self.delai,
+                             headers={"Authorization": f"Bearer {self._cle}"})
             rep.raise_for_status()
-            texte = rep.json()["message"]["content"].strip()
-        except (httpx.HTTPError, KeyError, ValueError) as e:
-            raise ErreurLLM(f"Ollama injoignable ou réponse invalide ({self.url}) : {e}") from e
+            texte = rep.json()["choices"][0]["message"]["content"].strip()
+        except httpx.HTTPStatusError as e:
+            raise ErreurLLM(f"Groq a refusé la requête (code {e.response.status_code}) : {e.response.text[:200]}") from e
+        except (httpx.HTTPError, KeyError, IndexError, ValueError) as e:
+            raise ErreurLLM(f"Groq injoignable ou réponse invalide : {e}") from e
         if not texte:
             raise ErreurLLM("Réponse vide du modèle.")
         return texte
@@ -68,7 +78,7 @@ def creer_llm(config_llm: dict) -> LLM:
     if f == "anthropic":
         c = config_llm["anthropic"]
         return LLMAnthropic(c["modele"], c.get("max_tokens", 700), t, d)
-    if f == "ollama":
-        c = config_llm["ollama"]
-        return LLMOllama(c["url"], c["modele"], t, d)
-    raise ValueError(f"Fournisseur LLM inconnu : {f!r} (anthropic | ollama)")
+    if f == "groq":
+        c = config_llm["groq"]
+        return LLMGroq(c["modele"], c.get("max_tokens", 700), t, d)
+    raise ValueError(f"Fournisseur LLM inconnu : {f!r} (groq | anthropic)")

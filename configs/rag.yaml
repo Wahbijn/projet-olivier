@@ -27,13 +27,14 @@ rag:
       hachage: 0.28
 
   llm:
-    fournisseur: ollama               # anthropic | ollama
+    fournisseur: groq                 # groq | anthropic
     anthropic:
       modele: claude-sonnet-5-5       # alternative moins chère : claude-haiku-5-5
       max_tokens: 700
       # la clé se lit dans la variable d'environnement ANTHROPIC_API_KEY
-    ollama:
-      url: http://localhost:11434
-      modele: qwen2.5:3b
+    groq:
+      modele: openai/gpt-oss-120b      # autres : llama-3.1-8b-instant, openai/gpt-oss-20b (console.groq.com/docs/models)
+      max_tokens: 700
+      # la clé se lit dans la variable d'environnement GROQ_API_KEY
     temperature: 0.2
-    delai_secondes: 80
+    delai_secondes: 30
