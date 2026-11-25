@@ -78,6 +78,21 @@ const fr = {
   emptyDiag: 'Le diagnostic apparaîtra ici',
   emptyHeat: 'La carte de chaleur apparaîtra ici',
   tabsLabel: 'Fiche maladie',
+    ragTitle: 'Poser une question',
+  ragIntro: 'Réponses tirées de documents agronomiques, avec leurs sources.',
+  ragSuggestions: 'Questions fréquentes',
+  ragLabel: 'Votre question sur cette feuille',
+  ragPlaceholder: 'Votre question…',
+  ragSend: 'Envoyer',
+  ragThinking: 'Recherche dans les documents…',
+  ragSources: 'Sources ({n})',
+  ragOpenSource: 'Ouvrir la source',
+  ragYou: 'Vous',
+  ragBot: 'Assistant',
+  ragDisclaimer: 'Réponses générées par IA à partir de documents : à confirmer avec un ingénieur agronome.',
+  ragUnavailable: "L'assistant n'est pas disponible pour le moment.",
+  ragErrDown: 'Impossible de joindre le serveur. Réessayez dans un instant.',
+  ragErrGeneric: "L'assistant n'a pas pu répondre. Réessayez dans un instant.",
 }
 
 export type Cle = keyof typeof fr
@@ -156,6 +171,21 @@ const ar: Record<Cle, string> = {
   emptyDiag: 'سيظهر التشخيص هنا',
   emptyHeat: 'ستظهر الخريطة الحرارية هنا',
   tabsLabel: 'بطاقة المرض',
+    ragTitle: 'اطرح سؤالًا',
+  ragIntro: 'إجابات مستخرجة من وثائق زراعية، مع ذكر مصادرها.',
+  ragSuggestions: 'أسئلة شائعة',
+  ragLabel: 'سؤالك حول هذه الورقة',
+  ragPlaceholder: 'سؤالك…',
+  ragSend: 'إرسال',
+  ragThinking: 'جارٍ البحث في الوثائق…',
+  ragSources: 'المصادر ({n})',
+  ragOpenSource: 'فتح المصدر',
+  ragYou: 'أنت',
+  ragBot: 'المساعد',
+  ragDisclaimer: 'إجابات مولّدة بالذكاء الاصطناعي من وثائق: يجب تأكيدها مع مهندس زراعي.',
+  ragUnavailable: 'المساعد غير متاح حاليًا.',
+  ragErrDown: 'تعذّر الاتصال بالخادم. أعد المحاولة بعد قليل.',
+  ragErrGeneric: 'تعذّر على المساعد الإجابة. أعد المحاولة بعد قليل.',
 }
 
 const dicos: Record<Lang, Record<Cle, string>> = { fr, ar }

@@ -34,3 +34,18 @@ export interface Analyse {
 }
 
 export const CLASSES: ClasseMaladie[] = ['healthy', 'aculus', 'peacock_spot']
+
+/** Contrat de POST /ask (assistant RAG). */
+export interface RagSource {
+  numero: number
+  titre: string
+  url: string | null
+  extrait: string
+  score: number
+}
+
+export interface RagReponse {
+  reponse: string
+  sources: RagSource[]
+  refuse: boolean
+}

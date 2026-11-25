@@ -1,5 +1,6 @@
 /** Appels à l'API FastAPI. */
-import type { Prediction, Sante } from './types'
+import type { Classe, Prediction, RagReponse, Sante } from './types'   // RAG : Classe, RagReponse ajoutés
+import type { Lang } from './i18n'                                       // RAG
 
 export const API_URL = (import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000').replace(/\/$/, '')
 
@@ -49,4 +50,32 @@ export async function predire(fichier: Blob, nom: string): Promise<Prediction> {
   if (rep.status === 413) throw new ApiError('trop_lourde', detail)
   if (rep.status === 503) throw new ApiError('indisponible', detail)
   throw new ApiError('inconnue', detail)
+}
+
+// ---------- RAG : assistant agronomique ----------
+
+/** L'assistant est-il prêt côté serveur (index construit, modèle chargé) ? */
+export async function ragPret(): Promise<boolean> {
+  try {
+    const rep = await appeler(`${API_URL}/rag/health`)
+    return rep.ok && (await rep.json()).pret === true
+  } catch {
+    return false
+  }
+}
+
+export async function poserQuestion(
+  question: string,
+  classe: Classe | null,
+  confiance: number | null,
+  langue: Lang,
+): Promise<RagReponse> {
+  const rep = await appeler(`${API_URL}/ask`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, classe, confiance, langue }),
+  })
+  if (rep.ok) return rep.json()
+  if (rep.status === 503) throw new ApiError('indisponible')
+  throw new ApiError('inconnue')
 }

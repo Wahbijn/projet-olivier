@@ -1,0 +1,67 @@
+# Base de connaissances de l'assistant RAG.
+# Seule cette LISTE est versionnée : les documents sont téléchargés en local par
+# `python -m src.rag.telecharger` (ils restent la propriété de leurs auteurs, ne pas les republier).
+# Si un téléchargement échoue (site qui bloque les robots), enregistrer le fichier à la main dans
+# data/rag/docs/ sous le nom <id>.pdf ou <id>.html.
+#
+# Lacune connue : aucune source tunisienne n'a été trouvée (INRAT, ONH, Institut de l'Olivier...).
+# Les ajouter ici ou dans data/rag/docs/ améliorera beaucoup la pertinence locale.
+
+sources:
+  # ---- Œil de paon (Venturia oleaginea / Spilocaea oleagina) ----
+  - id: ucipm_peacock_spot
+    titre: "UC IPM – Olive Pest Management Guidelines : Peacock spot"
+    url: https://ipm.ucanr.edu/agriculture/olive/peacock-spot
+    langue: en
+
+  - id: pnw_olive_leaf_spot
+    titre: "Pacific Northwest Pest Management Handbooks – Olive leaf spot (peacock spot)"
+    url: https://pnwhandbooks.org/plantdisease/host-disease/olive-olea-europaea-olive-leaf-spot-peacock-spot-peacocks-eye
+    langue: en
+
+  - id: frontiers_olive_leaf_spot_2023
+    titre: "Buonaurio et al. (2023) – Olive leaf spot caused by Venturia oleaginea: an updated review, Frontiers in Plant Science"
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9868462
+    langue: en
+
+  - id: vossen_peacock_cercospora
+    titre: "Vossen (UC Cooperative Extension) – Peacock spot and Cercospora foliar diseases on olive"
+    url: https://class.ucanr.edu/sites/default/files/2010-07/27173.pdf
+    langue: en
+
+  - id: afidol_oeil_de_paon
+    titre: "AFIDOL / Centre Technique de l'Olivier – Fiche technique : l'œil de paon (2018)"
+    url: https://afidol.org/wp-content/uploads/2018/07/FT-Oeil-de-paon.pdf
+    langue: fr
+
+  - id: franceolive_oeil_de_paon
+    titre: "France Olive – Le Nouvel Olivier n°135 : l'œil de paon, épidémiologie et facteurs de résistance"
+    url: https://franceolive.fr/wp-content/uploads/2025/06/Article-le-nouvel-olivier-rubrique-technique-oeil-de-paon-partie-1.pdf
+    langue: fr
+
+  # ---- Acariens (Aculus olearius et autres ériophyides de l'olivier) ----
+  - id: slovenie_aculus_olearius_2026
+    titre: "Devetak et al. (2026) – First report of damage in olive orchards in Slovenia caused by Aculus olearius, BioInvasions Records (CC BY 4.0)"
+    url: https://openpub.fmach.it/retrieve/c9b33920-e0c5-4411-9b5e-0ee1b2618c66/2026%20BR%20Pedrazzoli.pdf
+    langue: en
+
+  - id: turquie_acariens_olivier
+    titre: "Mite diversity and population dynamics of eriophyid mites on olive trees in Western Turkey"
+    url: https://dergipark.org.tr/tr/download/article-file/906671
+    langue: en
+
+  - id: teatronaturale_aculus_olearius
+    titre: "Teatro Naturale – Aculus olearius : un nuovo nemico per l'olivicoltura"
+    url: https://www.teatronaturale.it/strettamente-tecnico/l-arca-olearia/49074-aculus-olearius-un-nuovo-nemico-per-l-olivicoltura.htm
+    langue: it
+
+  - id: ucipm_olive_mite
+    titre: "UC IPM – Olive mite (Oxycenus maxwelli) : acarien ériophyide voisin, utile pour les symptômes généraux"
+    url: https://ipm.ucanr.edu/agriculture/olive/olive-mite
+    langue: en
+
+  # ---- Contexte maghrébin ----
+  - id: maroc_maladies_olivier
+    titre: "Maladies et ravageurs de l'olivier au Maroc (région Tadla-Azilal) – titre exact à vérifier"
+    url: https://core.ac.uk/download/287304788.pdf
+    langue: fr
