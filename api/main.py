@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
+from api.rag_routes import charger_rag, router as rag_router      # RAG (1/3)
 from src.models.predict import Predicteur
 
 TAILLE_MAX_OCTETS = 10 * 1024 * 1024        # 10 Mo
@@ -26,6 +27,7 @@ async def cycle_de_vie(app: FastAPI):
         etat["predicteur"] = Predicteur()
     except FileNotFoundError as e:
         etat["erreur"] = f"Modèle introuvable : {e.filename}"
+    charger_rag()           # RAG (2/3) : assistant optionnel, n'empêche jamais l'API de démarrer
     yield
 
 
@@ -38,6 +40,7 @@ app = FastAPI(
 
 # Autorise l'interface web (React) à appeler l'API
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.include_router(rag_router)                                    # RAG (3/3)
 
 
 # ---------- Schémas Pydantic (format des réponses) ----------

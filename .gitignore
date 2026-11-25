@@ -19,3 +19,6 @@ mlartifacts/
 frontend/node_modules/
 frontend/dist/
 frontend/.env.local
+# RAG : documents téléchargés et index reconstruit en local
+data/rag/docs/*
+data/rag/index/*

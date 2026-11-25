@@ -25,3 +25,9 @@ python-multipart
 
 # --- Tests ---
 pytest
+# --- RAG : assistant agronomique ---
+httpx
+pypdf
+beautifulsoup4
+sentence-transformers
+anthropic
