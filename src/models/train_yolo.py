@@ -43,6 +43,16 @@ def charger_yaml(chemin):
         return yaml.safe_load(f)
 
 
+def poids_base(modele):
+    """Chemin absolu des poids de départ (relatif à la racine du projet).
+
+    Passer le chemin complet fait qu'Ultralytics télécharge un poids absent DANS
+    models/pretrained/ ; passer seulement le nom le téléchargerait dans le dossier courant."""
+    chemin = RACINE / modele
+    chemin.parent.mkdir(parents=True, exist_ok=True)
+    return str(chemin)
+
+
 def yaml_absolu():
     """Copy data.yaml with an absolute `path` (Ultralytics needs it; never committed)."""
     donnees = yaml.safe_load((DONNEES / "data.yaml").read_text(encoding="utf-8"))
@@ -77,7 +87,7 @@ def main():
         mlflow.set_tags({"author": membre, "task": "detection", "pipeline": "dvc"})
         mlflow.log_params(p)
 
-        modele = YOLO(p["modele"])
+        modele = YOLO(poids_base(p["modele"]))
         modele.train(data=str(data_yaml), imgsz=p["imgsz"], epochs=p["epochs"], batch=p["batch"],
                      patience=p["patience"], seed=p["seed"], deterministic=True, workers=p["workers"],
                      project=str(RUNS / "detect"), name="olive", exist_ok=True, verbose=True)

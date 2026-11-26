@@ -42,7 +42,7 @@ detection:
     revue_par_classe: 30        # superpositions sauvegardées par classe pour relecture
   yolo:
     experience: olive-detection
-    modele: yolo11n.pt          # yolo12n.pt pour reproduire l'article à l'identique
+    modele: models/pretrained/yolo11n.pt   # relatif à la racine ; absent -> téléchargé à cet emplacement. yolo12n.pt pour reproduire l'article
     imgsz: 320
     epochs: 100
     batch: 16                   # GTX 1650 (4 Go) : passer à 8 si « CUDA out of memory »
