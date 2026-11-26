@@ -1,0 +1,10 @@
+{
+  "dossier_a": "data/processed/yolo/images/test",
+  "dossier_b": "data/processed/yolo/images/train",
+  "n_a": 326,
+  "n_b": 2287,
+  "seuil_similarite": 0.9844,
+  "taux_meme_feuille": 0.0,
+  "similarite_mediane": 0.9720085859298706,
+  "verdict": "ok"
+}

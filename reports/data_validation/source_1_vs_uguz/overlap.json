@@ -1,0 +1,10 @@
+{
+  "dossier_a": "data/raw/source_1",
+  "dossier_b": "data/raw/uguz",
+  "n_a": 1000,
+  "n_b": 3400,
+  "taux_identiques": 0.184,
+  "taux_proches": 0.602,
+  "distance_mediane": 12.0,
+  "verdict": "peu_de_chevauchement"
+}

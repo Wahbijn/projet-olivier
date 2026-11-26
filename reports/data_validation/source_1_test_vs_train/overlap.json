@@ -1,0 +1,10 @@
+{
+  "dossier_a": "data/raw/source_1/Zeytin_224x224_Augmented/test",
+  "dossier_b": "data/raw/source_1/Zeytin_224x224_Augmented/train",
+  "n_a": 970,
+  "n_b": 5011,
+  "taux_identiques": 0.42061855670103093,
+  "taux_proches": 0.9896907216494846,
+  "distance_mediane": 8.0,
+  "verdict": "copies_ou_augmentations"
+}
