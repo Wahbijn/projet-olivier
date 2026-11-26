@@ -13,6 +13,7 @@ import { useI18n, type Cle } from './i18n'
 import { preparerImage, verifierFichier } from './prepareImage'
 import type { Analyse } from './types'
 import css from './App.module.css'
+import Assistant from './components/Assistant'
 
 const MAX_HISTORIQUE = 12
 
@@ -146,6 +147,9 @@ export default function App() {
               </div>
               <div className={css.fiche}>
                 <DiseaseInfo key={classeFiche} classe={classeFiche!} />
+              </div>
+              <div className={css.assistant}>
+                <Assistant key={courante.id} analyse={courante} />
               </div>
             </>
           ) : (

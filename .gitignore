@@ -37,3 +37,6 @@ frontend/.env.local
 mlflow.db
 # sorties visuelles des contrôles de données (lourdes, non versionnées)
 reports/data_validation/*/examples/
+# RAG : documents téléchargés et index reconstruit en local
+data/rag/docs/*
+data/rag/index/*

@@ -1,0 +1,40 @@
+# Configuration du module RAG (assistant agronomique basé sur des documents)
+
+rag:
+  sources: data/rag/sources.yaml      # liste des documents (URL, titre, langue)
+  docs_dir: data/rag/docs             # documents téléchargés (non versionnés)
+  index_dir: data/rag/index           # index vectoriel construit (non versionné)
+
+  decoupage:                          # tailles en caractères
+    taille: 900
+    chevauchement: 150
+
+  embeddings:
+    # "sentence-transformers" : modèle multilingue local (FR / AR / EN), gratuit
+    # "hachage"               : sans dépendance ni téléchargement (tests, secours), moins précis
+    fournisseur: sentence-transformers
+    modele: intfloat/multilingual-e5-small
+
+  recherche:
+    top_k: 5                          # nombre de passages donnés au LLM
+    max_par_document: 2               # évite qu'un seul document occupe tous les passages
+    # Similarité cosinus minimale pour qu'un passage soit jugé pertinent. Dépend du modèle : les
+    # modèles e5 donnent des scores groupés entre ~0,70 et ~0,90. À CALIBRER avec
+    # `python -m src.rag.diagnostic "ta question"` (voir README) ; en dessous, l'assistant refuse
+    # de répondre au lieu d'inventer.
+    score_min:
+      sentence-transformers: 0.76
+      hachage: 0.28
+
+  llm:
+    fournisseur: groq                 # groq | anthropic
+    anthropic:
+      modele: claude-sonnet-5-5       # alternative moins chère : claude-haiku-5-5
+      max_tokens: 700
+      # la clé se lit dans la variable d'environnement ANTHROPIC_API_KEY
+    groq:
+      modele: openai/gpt-oss-120b      # autres : llama-3.1-8b-instant, openai/gpt-oss-20b (console.groq.com/docs/models)
+      max_tokens: 700
+      # la clé se lit dans la variable d'environnement GROQ_API_KEY
+    temperature: 0.2
+    delai_secondes: 30

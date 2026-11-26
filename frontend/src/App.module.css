@@ -108,12 +108,13 @@
   display: contents;
 }
 
-/* Ordre du parcours mobile : conseils, envoi, résultat, heatmap, fiche, nouvelle analyse, historique */
+/* Ordre du parcours mobile : conseils, envoi, résultat, heatmap, fiche, assistant, nouvelle analyse, historique */
 .conseils { order: 10; }
 .envoi { order: 20; }
 .resultat { order: 30; scroll-margin-top: 1rem; }
 .colDroite { order: 40; }
 .fiche { order: 50; }
+.assistant { order: 55; } /* RAG (1/3) */
 .nouvelle { order: 60; align-self: center; }
 .historique { order: 70; }
 
@@ -304,6 +305,7 @@
   .envoi,
   .resultat,
   .fiche,
+  .assistant, /* RAG (2/3) */
   .nouvelle,
   .historique {
     order: 0;
@@ -367,6 +369,11 @@
 
   .fiche > section {
     flex: 1;
+  }
+
+  /* RAG (3/3) : l'assistant garde sa hauteur naturelle ; la colonne centrale défile si besoin */
+  .assistant {
+    flex: none;
   }
 
   /* États vides : visibles sur ordinateur, ils remplissent le panneau */
