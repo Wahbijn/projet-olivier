@@ -102,8 +102,8 @@ stages:
       nfiles: 6577
     - path: src/models/train_yolo.py
       hash: md5
-      md5: 0a8ab2846695c00608496d95eaa4c416
-      size: 5019
+      md5: 21368312ba89872249f34622945ead29
+      size: 5419
     params:
       configs/config.yaml:
         detection.classes:
@@ -113,7 +113,7 @@ stages:
       configs/param.yaml:
         detection.yolo:
           experience: olive-detection
-          modele: yolo11n.pt
+          modele: models/pretrained/yolo11n.pt
           imgsz: 320
           epochs: 100
           batch: 16
