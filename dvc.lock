@@ -97,9 +97,9 @@ stages:
     deps:
     - path: data/processed/yolo
       hash: md5
-      md5: f5ddf88df3c5f825a42074c2f28c52af.dir
-      size: 185289288
-      nfiles: 6577
+      md5: 879a5f15208111d80379e0d1d133098c.dir
+      size: 184645450
+      nfiles: 6574
     - path: src/models/train_yolo.py
       hash: md5
       md5: 21368312ba89872249f34622945ead29
