@@ -23,6 +23,29 @@ augmentation:
   color_jitter_standard: {brightness: 0.2, contrast: 0.2, saturation: 0.2}
   color_jitter_renforce: {brightness: 0.5, contrast: 0.5, saturation: 0.3, hue: 0.03}
 
+detection:
+  decoupage:                       # découpage propre à la détection (après dédoublonnage inter-sources)
+    train: 0.7
+    val: 0.2
+    test: 0.1
+    seed: 42
+  annotation:
+    marge: 0.05                 # marge autour de la boîte (fraction de la taille)
+    hsv_min: [10, 30, 25]       # plus large que le vert pur : garde les zones jaunies / tachées
+    hsv_max: [95, 255, 255]
+    aire_min: 0.02              # ignore les contours plus petits que 2 % de l'image
+    revue_par_classe: 30        # superpositions sauvegardées par classe pour relecture
+  yolo:
+    experience: olive-detection
+    modele: yolo11n.pt          # yolo12n.pt pour reproduire l'article à l'identique
+    imgsz: 320
+    epochs: 100
+    batch: 16                   # GTX 1650 (4 Go) : passer à 8 si « CUDA out of memory »
+    patience: 20
+    workers: 2
+    seed: 42
+    conf_image: 0.25            # seuil de confiance pour l'exactitude au niveau image
+
 modeles:
   resnet50_baseline:
     architecture: resnet50

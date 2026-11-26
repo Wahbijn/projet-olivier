@@ -11,7 +11,7 @@ stages:
     cmd: python -m src.features.feature_extraction
     deps:
       - src/features/feature_extraction.py
-      - data/raw
+      - data/raw/uguz                         # suivi par DVC (data/raw/uguz.dvc) ; ajouter data/raw/zeytin quand il sera suivi
       - data/preprocessing/splits.csv
     params:
       - configs/config.yaml:
@@ -73,4 +73,59 @@ stages:
       - Resultats/matrices_confusion_test.png:
           cache: false
       - Resultats/drift_ks.png:
+          cache: false
+
+  detection_dataset:
+    cmd: python -m src.data.make_detection_dataset
+    deps:
+      - src/data/make_detection_dataset.py
+      - data/raw/uguz
+    params:
+      - configs/config.yaml:
+          - detection.sources
+          - detection.correspondance_classes
+      - configs/param.yaml:
+          - detection.decoupage
+    outs:
+      - data/interim/detection_manifest.csv
+      - reports/data_validation/label_conflicts.csv:
+          cache: false
+    metrics:
+      - reports/data_validation/detection_dataset.json:
+          cache: false
+
+  annotation:
+    cmd: python -m src.features.auto_annotate
+    deps:
+      - src/features/auto_annotate.py
+      - data/interim/detection_manifest.csv
+      - data/raw/uguz
+    params:
+      - configs/config.yaml:
+          - detection.classes
+      - configs/param.yaml:
+          - detection.annotation
+    outs:
+      - data/processed/yolo
+      - reports/annotation_review
+    metrics:
+      - reports/annotation_summary.json:
+          cache: false
+
+  entrainement_yolo:
+    cmd: python -m src.models.train_yolo
+    deps:
+      - src/models/train_yolo.py
+      - data/processed/yolo
+    params:
+      - configs/config.yaml:
+          - detection.classes
+      - configs/param.yaml:
+          - detection.yolo
+    outs:
+      - models/yolo_best.pt
+      - reports/yolo:
+          cache: false
+    metrics:
+      - reports/metrics_yolo.json:
           cache: false

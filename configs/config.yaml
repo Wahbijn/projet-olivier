@@ -51,3 +51,16 @@ suivi:
   dossier_artefacts: mlartifacts
 
 resultats: Resultats
+
+detection:                                  # pipeline de détection YOLO (OLIVE-CAD), voir src/data/make_detection_dataset.py
+  sources:                                  # dossiers sous data/raw, chacun suivi par DVC (source_1 = augmenté, exclu)
+    - data/raw/uguz/dataset
+  classes: [healthy, aculus, peacock_spot]          # ids YOLO 0, 1, 2 (même ordre que OLIVE-CAD)
+  correspondance_classes:                   # nom du dossier réel -> classe (insensible à la casse)
+    Healthy: healthy
+    aculus_olearius: aculus
+    olive_peacock_spot: peacock_spot
+    # jeu augmenté (data/raw/source_1, non utilisé pour l'instant)
+    Saglikli: healthy
+    Pas_Akari: aculus
+    Kus_Gozu_Mantari: peacock_spot

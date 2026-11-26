@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  detection_dataset:
+    cmd: python -m src.data.make_detection_dataset
+    deps:
+    - path: data/raw/uguz
+      hash: md5
+      md5: ecf4acc19d914a3e073341632ffa283d.dir
+      size: 102691776
+      nfiles: 3400
+    - path: src/data/make_detection_dataset.py
+      hash: md5
+      md5: d087c1ebeabbfe548471db1041f2f82b
+      size: 5268
+    params:
+      configs/config.yaml:
+        detection.correspondance_classes:
+          Healthy: healthy
+          aculus_olearius: aculus
+          olive_peacock_spot: peacock_spot
+          Saglikli: healthy
+          Pas_Akari: aculus
+          Kus_Gozu_Mantari: peacock_spot
+        detection.sources:
+        - data/raw/uguz/dataset
+      configs/param.yaml:
+        detection.decoupage:
+          train: 0.7
+          val: 0.2
+          test: 0.1
+          seed: 42
+    outs:
+    - path: data/interim/detection_manifest.csv
+      hash: md5
+      md5: 96ba85bf44fc593b417b193464b8c0ee
+      size: 271425
+    - path: reports/data_validation/detection_dataset.json
+      hash: md5
+      md5: e3c55996affcbdb16286047961dbc3d4
+      size: 358
+    - path: reports/data_validation/label_conflicts.csv
+      hash: md5
+      md5: 5f8b684c8a2ffa389daf67ea1b92cf29
+      size: 37
+  annotation:
+    cmd: python -m src.features.auto_annotate
+    deps:
+    - path: data/interim/detection_manifest.csv
+      hash: md5
+      md5: 96ba85bf44fc593b417b193464b8c0ee
+      size: 271425
+    - path: data/raw/uguz
+      hash: md5
+      md5: ecf4acc19d914a3e073341632ffa283d.dir
+      size: 102691776
+      nfiles: 3400
+    - path: src/features/auto_annotate.py
+      hash: md5
+      md5: 4e363cd2f9ad6b28b8fa3fb6d7be4d13
+      size: 6081
+    params:
+      configs/config.yaml:
+        detection.classes:
+        - healthy
+        - aculus
+        - peacock_spot
+      configs/param.yaml:
+        detection.annotation:
+          marge: 0.05
+          hsv_min:
+          - 10
+          - 30
+          - 25
+          hsv_max:
+          - 95
+          - 255
+          - 255
+          aire_min: 0.02
+          revue_par_classe: 30
+    outs:
+    - path: data/processed/yolo
+      hash: md5
+      md5: 1664c2082032b7a205f5c34922ea9b88.dir
+      size: 181775881
+      nfiles: 6444
+    - path: reports/annotation_review
+      hash: md5
+      md5: af7ad23b40c58a220bd9fa34e97e88ba.dir
+      size: 6060662
+      nfiles: 92
+    - path: reports/annotation_summary.json
+      hash: md5
+      md5: f03039cf5de2d22fbc681c744a35e2a0
+      size: 161

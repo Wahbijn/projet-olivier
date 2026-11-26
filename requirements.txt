@@ -9,12 +9,16 @@ scikit-learn>=1.4
 scipy>=1.11
 matplotlib>=3.8
 pyyaml>=6.0
+imagehash>=4.3          # empreintes perceptuelles (dédoublonnage, data_validation)
+opencv-python>=4.8      # annotation automatique (src/features/auto_annotate.py)
+python-dotenv>=1.0      # lit .env (MLFLOW_TRACKING_URI, TEAM_MEMBER)
 
 # --- Deep Learning ---
 torch>=2.3
 torchvision>=0.18
 onnx>=1.16              # export ONNX (src/models/test.py)
 onnxruntime>=1.18
+ultralytics>=8.3        # détection YOLO (src/models/train_yolo.py)
 
 # --- Suivi des expériences et versionnement ---
 mlflow>=2.14

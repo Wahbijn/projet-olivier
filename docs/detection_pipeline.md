@@ -1,0 +1,168 @@
+# Detection pipeline (OLIVE-CAD method) — integration guide
+
+Copy the files from this zip into the project **at the same paths**, then **merge** (do not replace)
+the snippets below into your existing files.
+
+## 1. New files
+
+| File | Role | Run with |
+|---|---|---|
+| `src/data/data_validation.py` | Diagnostic tool: duplicates / augmented copies between two folders | `python -m src.data.data_validation --a ... --b ...` |
+| `src/data/make_detection_dataset.py` | DVC stage `detection_dataset`: collect → dedup across sources → stratified split | `dvc repro detection_dataset` |
+| `src/features/auto_annotate.py` | DVC stage `annotation`: automatic YOLO boxes (HSV + contours) | `dvc repro annotation` |
+| `src/models/train_yolo.py` | DVC stage `entrainement_yolo`: train + test evaluation + MLflow | `dvc repro entrainement_yolo` |
+| `tests/test_detection_data.py` | Unit tests (synthetic images, no dataset needed) | `pytest` |
+
+Do **not** add the old `scripts/*.py` files to the repo (`train_overnight.py`, `build_yolo_dataset.py`,
+`check_overlap.py`): they are replaced by the modules above.
+
+## 2. `configs/config.yaml` — add this section
+
+```yaml
+detection:
+  sources:                                  # folders under data/raw, each tracked by DVC
+    - data/raw/uguz/dataset
+  classes: [healthy, aculus, peacock_spot]          # YOLO ids 0, 1, 2 (same order as OLIVE-CAD)
+  correspondance_classes:                   # source folder name -> class (case-insensitive)
+    healthy: healthy
+    saglikli: healthy
+    aculus_olearius: aculus
+    pas_akari: aculus
+    olive_peacock_spot: peacock_spot
+    kus_gozu_mantari: peacock_spot
+```
+
+## 3. `configs/param.yaml` — add this section
+
+```yaml
+detection:
+  decoupage:
+    train: 0.7
+    val: 0.2
+    test: 0.1
+    seed: 42
+  annotation:
+    marge: 0.05                 # box padding (fraction of box size)
+    hsv_min: [10, 30, 25]       # wider than pure green: keeps yellowed/spotted areas
+    hsv_max: [95, 255, 255]
+    aire_min: 0.02              # ignore contours smaller than 2 % of the image
+    revue_par_classe: 30        # overlays saved per class for manual review
+  yolo:
+    experience: olive-detection
+    modele: yolo11n.pt          # yolo12n.pt to reproduce the paper exactly
+    imgsz: 320
+    epochs: 100
+    batch: 16                   # GTX 1650 (4 GB): lower to 8 if CUDA out of memory
+    patience: 20
+    workers: 2
+    seed: 42
+    conf_image: 0.25            # confidence threshold for the image-level accuracy
+```
+
+## 4. `dvc.yaml` — add these stages
+
+```yaml
+  detection_dataset:
+    cmd: python -m src.data.make_detection_dataset
+    deps:
+      - src/data/make_detection_dataset.py
+      - data/raw/uguz
+    params:
+      - configs/config.yaml:
+          - detection.sources
+          - detection.correspondance_classes
+      - configs/param.yaml:
+          - detection.decoupage
+    outs:
+      - data/interim/detection_manifest.csv
+      - reports/data_validation/label_conflicts.csv:
+          cache: false
+    metrics:
+      - reports/data_validation/detection_dataset.json:
+          cache: false
+
+  annotation:
+    cmd: python -m src.features.auto_annotate
+    deps:
+      - src/features/auto_annotate.py
+      - data/interim/detection_manifest.csv
+      - data/raw/uguz
+    params:
+      - configs/config.yaml:
+          - detection.classes
+      - configs/param.yaml:
+          - detection.annotation
+    outs:
+      - data/processed/yolo
+      - reports/annotation_review
+    metrics:
+      - reports/annotation_summary.json:
+          cache: false
+
+  entrainement_yolo:
+    cmd: python -m src.models.train_yolo
+    deps:
+      - src/models/train_yolo.py
+      - data/processed/yolo
+    params:
+      - configs/config.yaml:
+          - detection.classes
+      - configs/param.yaml:
+          - detection.yolo
+    outs:
+      - models/yolo_best.pt
+      - reports/yolo:
+          cache: false
+    metrics:
+      - reports/metrics_yolo.json:
+          cache: false
+```
+
+## 5. `.gitignore` — add
+
+```gitignore
+/runs/
+/data/interim/
+*.pt
+```
+
+## 6. `requirements.txt` — add
+
+```
+ultralytics
+imagehash
+opencv-python
+python-dotenv
+```
+
+## 7. Order of commands
+
+```powershell
+Rename-Item data\raw\source_2 uguz
+dvc add data/raw/uguz
+python -m src.data.data_validation --a data/raw/source_1 --b data/raw/uguz --max 1000
+pytest
+dvc repro annotation            # runs detection_dataset + annotation
+# -> look at reports/annotation_review/ (especially fallback/) BEFORE training
+dvc repro entrainement_yolo
+dvc metrics show
+git add dvc.yaml dvc.lock configs/ src/ tests/ reports/*.json reports/yolo data/raw/uguz.dvc .gitignore requirements.txt
+git commit -m "feat: YOLO detection pipeline (OLIVE-CAD auto-annotation, dedup, DVC stages)"
+dvc push
+git push
+```
+
+## Folder conventions (cookiecutter data science)
+
+```
+data/raw/        immutable source datasets (DVC)          never edited by code
+data/interim/    intermediate files (manifests)            regenerated by DVC
+data/processed/  final model inputs (yolo/, images_224.npy) regenerated by DVC
+models/          trained weights (DVC outs)
+reports/         metrics (JSON, in Git), figures, review overlays
+src/data/        load / validate / split data
+src/features/    transform data (preprocessing, annotation)
+src/models/      train / evaluate / predict
+configs/         config.yaml = where/what, param.yaml = how (hyper-parameters)
+tests/           pytest
+```

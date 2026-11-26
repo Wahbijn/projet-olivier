@@ -6,12 +6,20 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Données et modèles (gérés par DVC, pas par Git)
-data/raw/
+# Données brutes : suivies par DVC (data/raw/*.dvc et data/raw/.gitignore restent versionnés)
+data/raw/*
+!data/raw/*.dvc
+!data/raw/.gitignore
 data/processed/
+/data/interim/
 models/*.pt
 models/*.onnx
+# poids YOLO téléchargés à la racine (yolo11n.pt) ; aucun .pt n'est versionné
+*.pt
 mlartifacts/
 mlruns/
+# dossier de travail Ultralytics
+/runs/
 
 # Divers
 .vscode/

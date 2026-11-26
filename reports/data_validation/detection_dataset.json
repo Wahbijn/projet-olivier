@@ -1,0 +1,21 @@
+{
+  "n_images": 3221,
+  "n_conflits_classe": 0,
+  "par_split": {
+    "train": {
+      "peacock_spot": 1020,
+      "aculus": 612,
+      "healthy": 622
+    },
+    "val": {
+      "aculus": 175,
+      "healthy": 178,
+      "peacock_spot": 291
+    },
+    "test": {
+      "peacock_spot": 146,
+      "aculus": 88,
+      "healthy": 89
+    }
+  }
+}
