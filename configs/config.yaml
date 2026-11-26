@@ -48,7 +48,7 @@ suivi:                                  # serveur MLflow : variable MLFLOW_TRACK
   experience: olive-disease             # runs historiques du notebook Kaggle (métriques seules)
   experience_pipeline: olive-disease-pipeline   # runs lancés par src/models/train.py
 
-resultats: Resultats
+resultats: reports/classification
 
 detection:                                  # pipeline de détection YOLO (OLIVE-CAD), voir src/data/make_detection_dataset.py
   sources:                                  # dossiers sous data/raw, chacun suivi par DVC (source_1 = augmenté, exclu)

@@ -10,6 +10,6 @@ mlartifacts/
 mlruns/
 mlflow.db
 notebooks/
-Resultats/
+reports/classification/
 frontend/
 tests/

@@ -52,7 +52,7 @@ projet-olivier/
 ├── api/                      # API FastAPI (/health, /predict) + Dockerfile
 ├── frontend/                 # interface web React (Vite) + Dockerfile
 ├── models/                   # *.pt, model_V1.onnx (DVC, pas Git)
-├── Resultats/                # matrices de confusion, Grad-CAM, drift, tableaux CSV, metriques.json
+├── reports/classification/                # matrices de confusion, Grad-CAM, drift, tableaux CSV, metriques.json
 ├── configs/                  # config.yaml (chemins, classes, déploiement), param.yaml (hyperparamètres)
 ├── tests/                    # pytest : prétraitement, modèle exporté, API
 ├── dvc.yaml                  # pipeline reproductible : preparation → entrainement → evaluation
@@ -118,7 +118,7 @@ pip install -r requirements.txt
 ```bash
 dvc repro                         # préparation → entraînement des 4 modèles → évaluation + export
 dvc repro entrainement@resnet50_baseline   # un seul modèle
-dvc metrics show                  # métriques du modèle déployé (Resultats/metriques.json)
+dvc metrics show                  # métriques du modèle déployé (reports/classification/metriques.json)
 dvc params diff                   # hyperparamètres modifiés depuis le dernier commit
 ```
 

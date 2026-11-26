@@ -6,7 +6,7 @@ Lancement (depuis la racine du projet) :
 
 Sorties :
     models/<modele>.pt                         poids + métadonnées (format lu par predict.py)
-    Resultats/historique_<modele>.csv          courbes par époque
+    reports/classification/historique_<modele>.csv          courbes par époque
     Run MLflow (expérience « olive-disease-pipeline ») avec paramètres, courbes, version des données
 """
 import argparse

@@ -41,7 +41,7 @@ stages:
             - decoupage.seed
       outs:
         - models/${item}.pt
-        - Resultats/historique_${item}.csv:
+        - reports/classification/historique_${item}.csv:
             cache: false
 
   evaluation:
@@ -60,19 +60,19 @@ stages:
     outs:
       - models/model_V1.pt
       - models/model_V1.onnx
-      - Resultats/comparaison_modeles.csv:
+      - reports/classification/comparaison_modeles.csv:
           cache: false
-      - Resultats/bilan_drift.csv:
+      - reports/classification/bilan_drift.csv:
           cache: false
-      - Resultats/seuils_confiance.csv:
+      - reports/classification/seuils_confiance.csv:
           cache: false
     metrics:
-      - Resultats/metriques.json:
+      - reports/classification/metriques.json:
           cache: false
     plots:
-      - Resultats/matrices_confusion_test.png:
+      - reports/classification/matrices_confusion_test.png:
           cache: false
-      - Resultats/drift_ks.png:
+      - reports/classification/drift_ks.png:
           cache: false
 
   detection_dataset:

@@ -9,7 +9,7 @@ Pour chaque modèle de configs/param.yaml présent dans models/ :
     - coût : paramètres, taille, temps CPU par image
 Pour le modèle « deploye: true » :
     - tableau des seuils de confiance, test KS (drift)
-    - export models/model_V1.pt + models/model_V1.onnx (vérifié) et Resultats/metriques.json
+    - export models/model_V1.pt + models/model_V1.onnx (vérifié) et reports/classification/metriques.json
 """
 import argparse
 import copy
