@@ -16,10 +16,12 @@ the snippets below into your existing files.
 Do **not** add the old `scripts/*.py` files to the repo (`train_overnight.py`, `build_yolo_dataset.py`,
 `check_overlap.py`): they are replaced by the modules above.
 
-**Source exclue : Zeytin augmenté (`source_1`).** Elle n'est pas intégrée au pipeline : 60 % de ses images
-sont proches d'une image d'Uğuz et 99 % des images de son test sont proches d'une image de son train
-(dont 42 % identiques), donc fuite train/test. Le jeu est archivé hors du projet, dans
-`D:\dev\data_archive\source_1` (non suivi par DVC).
+**Source exclue : Zeytin augmenté (`source_1`).** Elle n'est pas intégrée au pipeline. Contrôle par embeddings
+(`src/data/data_validation.py`, seuil de similarité 0,9844, rapports dans `reports/data_validation/`) :
+1,9 % des images (échantillon de 1 000) sont la même feuille qu'une image d'Uğuz ; 3,6 % des images de son
+test (échantillon de 500) ont une même feuille dans son train. Le premier contrôle, par pHash (distance ≤ 12),
+donnait 60 % pour Uğuz et 99 % pour test/train : il a été remplacé car il rapprochait des feuilles différentes. Le jeu est archivé hors du
+projet, dans `D:\dev\data_archive\source_1` (non suivi par DVC).
 
 ## 2. `configs/config.yaml` — add this section
 
