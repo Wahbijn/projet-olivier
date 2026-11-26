@@ -1,0 +1,54 @@
+{
+  "n_collectees": 3400,
+  "n_images": 3286,
+  "n_groupes": 2565,
+  "images_par_groupe_moyen": 1.28,
+  "taille_max_groupe": 16,
+  "groupes_par_taille": {
+    "1": 2020,
+    "2": 457,
+    "3": 48,
+    "4": 28,
+    "5": 4,
+    "6": 2,
+    "7": 1,
+    "8": 2,
+    "11": 1,
+    "14": 1,
+    "16": 1
+  },
+  "n_groupes_mixtes_exclus": 9,
+  "n_images_exclues": 20,
+  "seuil_similarite": 0.9844,
+  "nn_autre_classe": {
+    "median": 0.9522,
+    "p99": 0.982,
+    "max": 0.9979
+  },
+  "nn_meme_classe": {
+    "median": 0.9801,
+    "part_au_dessus_du_seuil": 0.3842
+  },
+  "images_par_split": {
+    "train": 2287,
+    "val": 673,
+    "test": 326
+  },
+  "par_split": {
+    "train": {
+      "aculus": 599,
+      "healthy": 671,
+      "peacock_spot": 1017
+    },
+    "val": {
+      "aculus": 182,
+      "healthy": 202,
+      "peacock_spot": 289
+    },
+    "test": {
+      "peacock_spot": 145,
+      "aculus": 90,
+      "healthy": 91
+    }
+  }
+}

@@ -10,8 +10,9 @@ classes:            # ordre fixé pour tout le projet (index 0, 1, 2)
   - peacock_spot
 
 donnees:
-  raw: data/raw
-  splits: data/preprocessing/splits.csv
+  raw: data/raw                         # data/raw/uguz/... et data/raw/zeytin/...
+  splits: data/preprocessing/splits.csv # chemins relatifs à data/raw
+  images_preparees: data/processed/images_224.npy
   sources:
     uguz:
       kaggle: habibulbasher01644/olive-leaf-image-dataset
@@ -24,7 +25,7 @@ donnees:
     aculus_olearius: aculus
     olive_peacock_spot: peacock_spot
     "sağlam": healthy
-    "hastalıklı": aculus     # en réalité de l'œil de paon (voir notebook, section 8)
+    "hastalıklı": malade     # évalué en binaire ; en réalité de l'œil de paon (notebook, section 8)
 
 pretraitement:
   taille_image: 224
@@ -43,8 +44,21 @@ modele_deploye:
   onnx: models/model_V1.onnx
   seuil_confiance: 0.8      # en dessous : reponse "incertain"
 
-suivi:
-  mlflow_uri: sqlite:///mlflow.db
-  experience: olive-disease
+suivi:                                  # serveur MLflow : variable MLFLOW_TRACKING_URI dans .env
+  experience: olive-disease             # runs historiques du notebook Kaggle (métriques seules)
+  experience_pipeline: olive-disease-pipeline   # runs lancés par src/models/train.py
 
-resultats: Resultats
+resultats: reports/classification
+
+detection:                                  # pipeline de détection YOLO (OLIVE-CAD), voir src/data/make_detection_dataset.py
+  sources:                                  # dossiers sous data/raw, chacun suivi par DVC (source_1 = augmenté, exclu)
+    - data/raw/uguz/dataset
+  classes: [healthy, aculus, peacock_spot]          # ids YOLO 0, 1, 2 (même ordre que OLIVE-CAD)
+  correspondance_classes:                   # nom du dossier réel -> classe (insensible à la casse)
+    Healthy: healthy
+    aculus_olearius: aculus
+    olive_peacock_spot: peacock_spot
+    # jeu augmenté exclu : archivé hors du projet (D:\dev\data_archive\source_1), non suivi par DVC
+    Saglikli: healthy
+    Pas_Akari: aculus
+    Kus_Gozu_Mantari: peacock_spot

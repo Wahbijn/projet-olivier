@@ -1,4 +1,5 @@
 # Hyperparamètres d'entraînement (valeurs utilisées dans notebooks/analysis.ipynb)
+# Utilisés par src/models/train.py et suivis par DVC (dvc params diff).
 
 decoupage:
   train: 0.70
@@ -13,6 +14,7 @@ entrainement:
   perte: cross_entropy
   precision_mixte: true
   metrique_selection: f1_macro_val
+  num_workers: 2          # 2 conseillé sous Windows
 
 augmentation:
   random_resized_crop_scale: [0.8, 1.0]
@@ -21,24 +23,56 @@ augmentation:
   color_jitter_standard: {brightness: 0.2, contrast: 0.2, saturation: 0.2}
   color_jitter_renforce: {brightness: 0.5, contrast: 0.5, saturation: 0.3, hue: 0.03}
 
+detection:
+  decoupage:                       # découpage propre à la détection (après dédoublonnage inter-sources)
+    train: 0.7
+    val: 0.2
+    test: 0.1
+    seed: 42
+  regroupement:                 # "same leaf" detection (src/data/similarity.py)
+    seuil: auto                 # auto = calibrated on different-class neighbours, or a number (e.g. 0.97)
+    quantile_calibration: 0.995
+    seuil_min: 0.90
+    batch: 32 
+  annotation:
+    marge: 0.05                 # marge autour de la boîte (fraction de la taille)
+    hsv_min: [10, 30, 25]       # plus large que le vert pur : garde les zones jaunies / tachées
+    hsv_max: [95, 255, 255]
+    aire_min: 0.02              # ignore les contours plus petits que 2 % de l'image
+    revue_par_classe: 30        # superpositions sauvegardées par classe pour relecture
+  yolo:
+    experience: olive-detection
+    modele: models/pretrained/yolo11n.pt   # relatif à la racine ; absent -> téléchargé à cet emplacement. yolo12n.pt pour reproduire l'article
+    imgsz: 320
+    epochs: 100
+    batch: 16                   # GTX 1650 (4 Go) : passer à 8 si « CUDA out of memory »
+    patience: 20
+    workers: 2
+    seed: 42
+    conf_image: 0.25            # seuil de confiance pour l'exactitude au niveau image
+
 modeles:
   resnet50_baseline:
+    architecture: resnet50
     lr: 1.0e-4
     epochs_max: 15
     patience: 4
     color_jitter: standard
     deploye: true
   efficientnet_b0_lr1e-4:
+    architecture: efficientnet_b0
     lr: 1.0e-4
     epochs_max: 15
     patience: 4
     color_jitter: standard
   efficientnet_b0_lr3e-4:
+    architecture: efficientnet_b0
     lr: 3.0e-4
     epochs_max: 20
     patience: 6
     color_jitter: standard
   efficientnet_b0_augfort:
+    architecture: efficientnet_b0
     lr: 3.0e-4
     epochs_max: 20
     patience: 6

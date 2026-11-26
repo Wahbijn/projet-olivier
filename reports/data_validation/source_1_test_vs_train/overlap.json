@@ -1,0 +1,11 @@
+{
+  "methode": "resnet18_leaf_embeddings",
+  "dossier_a": "D:/dev/data_archive/source_1/Zeytin_224x224_Augmented/test",
+  "dossier_b": "D:/dev/data_archive/source_1/Zeytin_224x224_Augmented/train",
+  "n_a": 500,
+  "n_b": 5011,
+  "seuil_similarite": 0.9844,
+  "taux_meme_feuille": 0.036,
+  "similarite_mediane": 0.9662507772445679,
+  "verdict": "ok"
+}

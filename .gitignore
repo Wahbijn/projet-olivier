@@ -6,11 +6,21 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Données et modèles (gérés par DVC, pas par Git)
+# Données brutes : suivies par DVC (data/raw/*.dvc et data/raw/.gitignore restent versionnés)
 data/raw/*
-!data/raw/.gitkeep
+!data/raw/*.dvc
+!data/raw/.gitignore
+data/processed/
+/data/interim/
 models/*.pt
 models/*.onnx
+*.onnx
+# poids YOLO téléchargés à la racine (yolo11n.pt) ; aucun .pt n'est versionné
+*.pt
 mlartifacts/
+mlruns/
+# dossier de travail Ultralytics
+/runs/
 
 # Divers
 .vscode/
@@ -19,6 +29,14 @@ mlartifacts/
 frontend/node_modules/
 frontend/dist/
 frontend/.env.local
+
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+mlflow.db
+# sorties visuelles des contrôles de données (lourdes, non versionnées)
+reports/data_validation/*/examples/
 # RAG : documents téléchargés et index reconstruit en local
 data/rag/docs/*
 data/rag/index/*

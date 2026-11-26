@@ -1,0 +1,137 @@
+schema: '2.0'
+stages:
+  detection_dataset:
+    cmd: python -m src.data.make_detection_dataset
+    deps:
+    - path: data/raw/uguz
+      hash: md5
+      md5: ecf4acc19d914a3e073341632ffa283d.dir
+      size: 102691776
+      nfiles: 3400
+    - path: src/data/make_detection_dataset.py
+      hash: md5
+      md5: 621b51864723d797981e3a89150d4932
+      size: 8731
+    params:
+      configs/config.yaml:
+        detection.correspondance_classes:
+          Healthy: healthy
+          aculus_olearius: aculus
+          olive_peacock_spot: peacock_spot
+          Saglikli: healthy
+          Pas_Akari: aculus
+          Kus_Gozu_Mantari: peacock_spot
+        detection.sources:
+        - data/raw/uguz/dataset
+      configs/param.yaml:
+        detection.decoupage:
+          train: 0.7
+          val: 0.2
+          test: 0.1
+          seed: 42
+    outs:
+    - path: data/interim/detection_manifest.csv
+      hash: md5
+      md5: b692ba3ea9bd990c1d4ee8b87d998f94
+      size: 290759
+    - path: reports/data_validation/detection_dataset.json
+      hash: md5
+      md5: 1e2d012bea89f54685cc0d8f46ad8803
+      size: 985
+    - path: reports/data_validation/label_conflicts.csv
+      hash: md5
+      md5: e14bac56c7a1963f5ddd9fb724e2a7e2
+      size: 1479
+  annotation:
+    cmd: python -m src.features.auto_annotate
+    deps:
+    - path: data/interim/detection_manifest.csv
+      hash: md5
+      md5: b692ba3ea9bd990c1d4ee8b87d998f94
+      size: 290759
+    - path: data/raw/uguz
+      hash: md5
+      md5: ecf4acc19d914a3e073341632ffa283d.dir
+      size: 102691776
+      nfiles: 3400
+    - path: src/features/auto_annotate.py
+      hash: md5
+      md5: 4e363cd2f9ad6b28b8fa3fb6d7be4d13
+      size: 6081
+    params:
+      configs/config.yaml:
+        detection.classes:
+        - healthy
+        - aculus
+        - peacock_spot
+      configs/param.yaml:
+        detection.annotation:
+          marge: 0.05
+          hsv_min:
+          - 10
+          - 30
+          - 25
+          hsv_max:
+          - 95
+          - 255
+          - 255
+          aire_min: 0.02
+          revue_par_classe: 30
+    outs:
+    - path: data/processed/yolo
+      hash: md5
+      md5: 879a5f15208111d80379e0d1d133098c.dir
+      size: 184645450
+      nfiles: 6574
+    - path: reports/annotation_review
+      hash: md5
+      md5: dcd956e8fc2c3e4265a2d52aa4a78872.dir
+      size: 6096423
+      nfiles: 92
+    - path: reports/annotation_summary.json
+      hash: md5
+      md5: 2517f2daff029e35eeafa622f67a9806
+      size: 161
+  entrainement_yolo:
+    cmd: python -m src.models.train_yolo
+    deps:
+    - path: data/processed/yolo
+      hash: md5
+      md5: 879a5f15208111d80379e0d1d133098c.dir
+      size: 184645450
+      nfiles: 6574
+    - path: src/models/train_yolo.py
+      hash: md5
+      md5: 21368312ba89872249f34622945ead29
+      size: 5419
+    params:
+      configs/config.yaml:
+        detection.classes:
+        - healthy
+        - aculus
+        - peacock_spot
+      configs/param.yaml:
+        detection.yolo:
+          experience: olive-detection
+          modele: models/pretrained/yolo11n.pt
+          imgsz: 320
+          epochs: 100
+          batch: 16
+          patience: 20
+          workers: 2
+          seed: 42
+          conf_image: 0.25
+    outs:
+    - path: models/yolo_best.pt
+      hash: md5
+      md5: 3068261be8981f2e06e1a4475623f5f7
+      size: 5471642
+    - path: reports/metrics_yolo.json
+      hash: md5
+      md5: 1ea5c6e4aadc09184559a4999d550925
+      size: 398
+    - path: reports/yolo
+      hash: md5
+      md5: 337ec113afff4ce0a84ba6974ddbbf6d.dir
+      size: 985995
+      nfiles: 8
