@@ -14,6 +14,7 @@ data/processed/
 /data/interim/
 models/*.pt
 models/*.onnx
+*.onnx
 # poids YOLO téléchargés à la racine (yolo11n.pt) ; aucun .pt n'est versionné
 *.pt
 mlartifacts/
@@ -34,3 +35,5 @@ frontend/.env.local
 .env.*
 !.env.example
 mlflow.db
+# sorties visuelles des contrôles de données (lourdes, non versionnées)
+reports/data_validation/*/examples/
