@@ -10,8 +10,8 @@ stages:
       nfiles: 3400
     - path: src/data/make_detection_dataset.py
       hash: md5
-      md5: d087c1ebeabbfe548471db1041f2f82b
-      size: 5268
+      md5: 621b51864723d797981e3a89150d4932
+      size: 8731
     params:
       configs/config.yaml:
         detection.correspondance_classes:
@@ -32,23 +32,23 @@ stages:
     outs:
     - path: data/interim/detection_manifest.csv
       hash: md5
-      md5: 96ba85bf44fc593b417b193464b8c0ee
-      size: 271425
+      md5: b692ba3ea9bd990c1d4ee8b87d998f94
+      size: 290759
     - path: reports/data_validation/detection_dataset.json
       hash: md5
-      md5: e3c55996affcbdb16286047961dbc3d4
-      size: 358
+      md5: 1e2d012bea89f54685cc0d8f46ad8803
+      size: 985
     - path: reports/data_validation/label_conflicts.csv
       hash: md5
-      md5: 5f8b684c8a2ffa389daf67ea1b92cf29
-      size: 37
+      md5: e14bac56c7a1963f5ddd9fb724e2a7e2
+      size: 1479
   annotation:
     cmd: python -m src.features.auto_annotate
     deps:
     - path: data/interim/detection_manifest.csv
       hash: md5
-      md5: 96ba85bf44fc593b417b193464b8c0ee
-      size: 271425
+      md5: b692ba3ea9bd990c1d4ee8b87d998f94
+      size: 290759
     - path: data/raw/uguz
       hash: md5
       md5: ecf4acc19d914a3e073341632ffa283d.dir
@@ -80,15 +80,15 @@ stages:
     outs:
     - path: data/processed/yolo
       hash: md5
-      md5: 1664c2082032b7a205f5c34922ea9b88.dir
-      size: 181775881
-      nfiles: 6444
+      md5: 879a5f15208111d80379e0d1d133098c.dir
+      size: 184645450
+      nfiles: 6574
     - path: reports/annotation_review
       hash: md5
-      md5: af7ad23b40c58a220bd9fa34e97e88ba.dir
-      size: 6060662
+      md5: dcd956e8fc2c3e4265a2d52aa4a78872.dir
+      size: 6096423
       nfiles: 92
     - path: reports/annotation_summary.json
       hash: md5
-      md5: f03039cf5de2d22fbc681c744a35e2a0
+      md5: 2517f2daff029e35eeafa622f67a9806
       size: 161

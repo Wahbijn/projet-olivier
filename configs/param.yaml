@@ -29,6 +29,11 @@ detection:
     val: 0.2
     test: 0.1
     seed: 42
+  regroupement:                 # "same leaf" detection (src/data/similarity.py)
+    seuil: auto                 # auto = calibrated on different-class neighbours, or a number (e.g. 0.97)
+    quantile_calibration: 0.995
+    seuil_min: 0.90
+    batch: 32 
   annotation:
     marge: 0.05                 # marge autour de la boîte (fraction de la taille)
     hsv_min: [10, 30, 25]       # plus large que le vert pur : garde les zones jaunies / tachées

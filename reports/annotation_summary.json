@@ -1,9 +1,9 @@
 {
-  "n_images": 3221,
+  "n_images": 3286,
   "fallback_par_classe": {
-    "peacock_spot": 1,
     "aculus": 1,
-    "healthy": 0
+    "healthy": 0,
+    "peacock_spot": 1
   },
-  "taux_fallback": 0.0006209251785159888
+  "taux_fallback": 0.0006086427267194157
 }
