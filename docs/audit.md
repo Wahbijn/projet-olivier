@@ -1,5 +1,8 @@
 # AUDIT — projet-olivier (before going collaborative)
 
+> Historical audit of 2026-11-25. Paths changed since (Resultats/ -> reports/classification/,
+> test.py -> evaluate.py); see README for the current structure.
+
 Date: 2026-11-25 · Branch audited: `feature/pipeline-mlops` (HEAD `7405cf8`) · `main` is older (last commit `78cae57`).
 
 **How this audit was done (read-only):** every config, pipeline, Docker, CI and `src/` / `api/` / `tests/` file was read. `git status`, `git ls-files`, `git log`, `git diff --stat` were run. `mlflow.db` was opened read-only with `sqlite3`. The dataset was checked with a small read-only script (does each path in `splits.csv` exist?). Nothing was modified.
