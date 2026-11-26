@@ -10,6 +10,7 @@ Sorties :
     Run MLflow (expérience « olive-disease-pipeline ») avec paramètres, courbes, version des données
 """
 import argparse
+import os
 import time
 
 import mlflow
@@ -112,16 +113,11 @@ def main():
     dossier_res = RACINE / config["resultats"]
     dossier_res.mkdir(exist_ok=True)
 
-    # MLflow : nouvelle expérience avec un dossier d'artefacts local
-    # (l'expérience historique du notebook pointe vers /kaggle/working)
-    suivi = config["suivi"]
-    mlflow.set_tracking_uri(suivi["mlflow_uri"])
-    nom_exp = suivi["experience_pipeline"]
-    if mlflow.get_experiment_by_name(nom_exp) is None:
-        mlflow.create_experiment(nom_exp, artifact_location=(RACINE / suivi["dossier_artefacts"]).as_uri())
-    mlflow.set_experiment(nom_exp)
+    # MLflow : serveur défini par MLFLOW_TRACKING_URI (fichier .env), expérience du pipeline
+    mlflow.set_experiment(config["suivi"]["experience_pipeline"])
 
     with mlflow.start_run(run_name=args.modele) as run:
+        mlflow.set_tag("author", os.getenv("TEAM_MEMBER", "unknown"))
         mlflow.log_params({
             "modele": p["architecture"], "lr": p["lr"], "patience": p["patience"],
             "epochs_max": p["epochs_max"], "color_jitter": p["color_jitter"],

@@ -44,11 +44,9 @@ modele_deploye:
   onnx: models/model_V1.onnx
   seuil_confiance: 0.8      # en dessous : reponse "incertain"
 
-suivi:
-  mlflow_uri: sqlite:///mlflow.db
+suivi:                                  # serveur MLflow : variable MLFLOW_TRACKING_URI dans .env
   experience: olive-disease             # runs historiques du notebook Kaggle (métriques seules)
   experience_pipeline: olive-disease-pipeline   # runs lancés par src/models/train.py
-  dossier_artefacts: mlartifacts
 
 resultats: Resultats
 

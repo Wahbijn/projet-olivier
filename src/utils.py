@@ -6,8 +6,10 @@ from pathlib import Path
 
 import numpy as np
 import yaml
+from dotenv import load_dotenv
 
 RACINE = Path(__file__).resolve().parents[1]          # dossier projet-olivier
+load_dotenv(RACINE / ".env")                           # MLFLOW_TRACKING_URI, identifiants, TEAM_MEMBER (voir .env.example)
 
 
 def charger_yaml(nom: str) -> dict:

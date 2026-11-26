@@ -87,7 +87,6 @@ def main():
     appareil = "cuda" if torch.cuda.is_available() else "cpu"
     dossier_res = RACINE / config["resultats"]
     dossier_res.mkdir(exist_ok=True)
-    mlflow.set_tracking_uri(config["suivi"]["mlflow_uri"])
 
     X, y, idx, _ = charger_donnees(classes)
     _, transfo_eval = transformations(config["pretraitement"]["taille_image"])
