@@ -16,7 +16,7 @@ python-dotenv>=1.0      # lit .env (MLFLOW_TRACKING_URI, TEAM_MEMBER)
 # --- Deep Learning ---
 torch>=2.3
 torchvision>=0.18
-onnx>=1.16              # export ONNX (src/models/test.py)
+onnx>=1.16              # export ONNX (src/models/evaluate.py)
 onnxruntime>=1.18
 ultralytics>=8.3        # détection YOLO (src/models/train_yolo.py)
 

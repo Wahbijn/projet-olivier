@@ -1,7 +1,7 @@
 """Évaluation des modèles entraînés + export du modèle déployé (notebook, sections 7 à 9).
 
 Lancement (après src/models/train.py) :
-    python -m src.models.test
+    python -m src.models.evaluate
 
 Pour chaque modèle de configs/param.yaml présent dans models/ :
     - test Uğuz (3 classes) : exactitude, F1 macro, matrice de confusion

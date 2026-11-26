@@ -46,7 +46,7 @@ projet-olivier/
 │   ├── features/feature_extraction.py# prétraitement des images (partagé entraînement + API)
 │   ├── models/architectures.py       # ResNet50 / EfficientNet-B0
 │   ├── models/train.py               # entraînement d'un modèle de param.yaml + suivi MLflow
-│   ├── models/test.py                # évaluation, drift, seuil de confiance, export .pt / .onnx
+│   ├── models/evaluate.py            # évaluation, drift, seuil de confiance, export .pt / .onnx
 │   ├── models/predict.py             # prédiction + Grad-CAM (utilisé par l'API)
 │   └── utils.py
 ├── api/                      # API FastAPI (/health, /predict) + Dockerfile
@@ -128,7 +128,7 @@ Les étapes peuvent aussi être lancées une par une :
 ```bash
 python -m src.features.feature_extraction              # images 224x224 -> data/processed/images_224.npy
 python -m src.models.train --modele resnet50_baseline  # un modèle de configs/param.yaml
-python -m src.models.test                              # comparaison, drift, seuils, export model_V1.pt / .onnx
+python -m src.models.evaluate                          # comparaison, drift, seuils, export model_V1.pt / .onnx
 ```
 
 Le découpage `data/preprocessing/splits.csv` est la référence des résultats ci-dessus ; il ne se régénère

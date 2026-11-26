@@ -45,9 +45,9 @@ stages:
             cache: false
 
   evaluation:
-    cmd: python -m src.models.test
+    cmd: python -m src.models.evaluate
     deps:
-      - src/models/test.py
+      - src/models/evaluate.py
       - data/processed/images_224.npy
       - data/preprocessing/splits.csv
       - models/resnet50_baseline.pt
