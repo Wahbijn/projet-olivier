@@ -4,7 +4,7 @@ or augmented versions)? Uses the leaf embeddings of src/data/similarity.py (leaf
 rotation/flip invariant), NOT pHash (pHash matched different leaves on these photos).
 
 Usage:
-    python -m src.data.data_validation --a data/raw/source_1 --b data/raw/uguz --max 1000
+    python -m src.data.data_validation --a D:/dev/data_archive/source_1 --b data/raw/uguz --max 1000
     python -m src.data.data_validation --a data/processed/yolo/images/test --b data/processed/yolo/images/train
 
 The "same leaf" threshold defaults to the one calibrated by the `detection_dataset` stage

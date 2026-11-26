@@ -16,6 +16,11 @@ the snippets below into your existing files.
 Do **not** add the old `scripts/*.py` files to the repo (`train_overnight.py`, `build_yolo_dataset.py`,
 `check_overlap.py`): they are replaced by the modules above.
 
+**Source exclue : Zeytin augmenté (`source_1`).** Elle n'est pas intégrée au pipeline : 60 % de ses images
+sont proches d'une image d'Uğuz et 99 % des images de son test sont proches d'une image de son train
+(dont 42 % identiques), donc fuite train/test. Le jeu est archivé hors du projet, dans
+`D:\dev\data_archive\source_1` (non suivi par DVC).
+
 ## 2. `configs/config.yaml` — add this section
 
 ```yaml
@@ -138,9 +143,9 @@ python-dotenv
 ## 7. Order of commands
 
 ```powershell
-Rename-Item data\raw\source_2 uguz
+# (déjà fait) source_2 renommé en data/raw/uguz
 dvc add data/raw/uguz
-python -m src.data.data_validation --a data/raw/source_1 --b data/raw/uguz --max 1000
+python -m src.data.data_validation --a D:\dev\data_archive\source_1 --b data/raw/uguz --max 1000
 pytest
 dvc repro annotation            # runs detection_dataset + annotation
 # -> look at reports/annotation_review/ (especially fallback/) BEFORE training

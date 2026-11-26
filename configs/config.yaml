@@ -58,7 +58,7 @@ detection:                                  # pipeline de détection YOLO (OLIVE
     Healthy: healthy
     aculus_olearius: aculus
     olive_peacock_spot: peacock_spot
-    # jeu augmenté (data/raw/source_1, non utilisé pour l'instant)
+    # jeu augmenté exclu : archivé hors du projet (D:\dev\data_archive\source_1), non suivi par DVC
     Saglikli: healthy
     Pas_Akari: aculus
     Kus_Gozu_Mantari: peacock_spot
