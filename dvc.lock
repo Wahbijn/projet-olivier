@@ -92,3 +92,46 @@ stages:
       hash: md5
       md5: 2517f2daff029e35eeafa622f67a9806
       size: 161
+  entrainement_yolo:
+    cmd: python -m src.models.train_yolo
+    deps:
+    - path: data/processed/yolo
+      hash: md5
+      md5: f5ddf88df3c5f825a42074c2f28c52af.dir
+      size: 185289288
+      nfiles: 6577
+    - path: src/models/train_yolo.py
+      hash: md5
+      md5: 0a8ab2846695c00608496d95eaa4c416
+      size: 5019
+    params:
+      configs/config.yaml:
+        detection.classes:
+        - healthy
+        - aculus
+        - peacock_spot
+      configs/param.yaml:
+        detection.yolo:
+          experience: olive-detection
+          modele: yolo11n.pt
+          imgsz: 320
+          epochs: 100
+          batch: 16
+          patience: 20
+          workers: 2
+          seed: 42
+          conf_image: 0.25
+    outs:
+    - path: models/yolo_best.pt
+      hash: md5
+      md5: 3068261be8981f2e06e1a4475623f5f7
+      size: 5471642
+    - path: reports/metrics_yolo.json
+      hash: md5
+      md5: 1ea5c6e4aadc09184559a4999d550925
+      size: 398
+    - path: reports/yolo
+      hash: md5
+      md5: 337ec113afff4ce0a84ba6974ddbbf6d.dir
+      size: 985995
+      nfiles: 8

@@ -1,0 +1,11 @@
+{
+  "test_map50": 0.9908533615785702,
+  "test_map50_95": 0.9528726823659794,
+  "test_precision": 0.9715350399383699,
+  "test_recall": 0.9495730675712846,
+  "test_image_accuracy": 0.9570552147239264,
+  "test_image_f1_macro": 0.955617707715343,
+  "test_map50_95_healthy": 0.9485323412729206,
+  "test_map50_95_aculus": 0.9480060275884362,
+  "test_map50_95_peacock_spot": 0.9620796782365811
+}
