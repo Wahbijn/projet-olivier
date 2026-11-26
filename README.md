@@ -35,30 +35,37 @@ Le détail complet est dans [`notebooks/analysis.ipynb`](notebooks/analysis.ipyn
 
 ```
 projet-olivier/
-├── data/
-│   ├── raw/                  # images brutes : uguz/ et zeytin/ (DVC, pas Git — voir « Données »)
-│   ├── preprocessing/        # splits.csv : découpage de référence train / val / test / externe
-│   └── processed/            # images_224.npy, généré par le pipeline (DVC)
+├── .github/workflows/ci.yml  # tests, build de l'interface et de l'image API à chaque push / PR
+├── api/                      # API FastAPI (/health, /predict) + Dockerfile
+├── configs/                  # config.yaml (chemins, classes, déploiement), param.yaml (hyperparamètres)
+├── data/                     # DVC, hors Git : raw/ (uguz/, source_1 archivé hors projet), processed/, interim/
+│   └── preprocessing/        # splits.csv : découpage de référence (versionné)
+├── docs/
+│   ├── audit.md              # audit du dépôt (constats et corrections)
+│   └── detection_pipeline.md # pipeline de détection YOLO : étapes, sources, commandes
+├── frontend/                 # interface web React (Vite) + Dockerfile
+├── models/
+│   └── pretrained/           # yolo11n.pt : poids de départ YOLO (non versionné)
+│                             # *.pt / *.onnx produits par le pipeline (DVC, hors Git)
 ├── notebooks/
 │   └── analysis.ipynb        # EDA, nettoyage, entraînement, évaluation, drift, Grad-CAM
+├── reports/
+│   ├── classification/       # matrices de confusion, Grad-CAM, drift, tableaux CSV, metriques.json
+│   ├── data_validation/      # contrôles de chevauchement entre jeux (overlap.json)
+│   ├── annotation_review/    # superpositions pour relecture des boîtes auto-annotées (non versionné)
+│   └── yolo/                 # courbes d'entraînement YOLO, matrice de confusion
+├── runs/                     # dossier de travail Ultralytics (non versionné)
+├── scripts/
+│   └── migrate_mlflow_to_dagshub.py   # outil ponctuel : copie des runs vers le serveur MLflow partagé
 ├── src/
-│   ├── data/preprocessing.py         # vérification / régénération du découpage (dédoublonnage dHash)
-│   ├── features/feature_extraction.py# prétraitement des images (partagé entraînement + API)
-│   ├── models/architectures.py       # ResNet50 / EfficientNet-B0
-│   ├── models/train.py               # entraînement d'un modèle de param.yaml + suivi MLflow
-│   ├── models/evaluate.py            # évaluation, drift, seuil de confiance, export .pt / .onnx
-│   ├── models/predict.py             # prédiction + Grad-CAM (utilisé par l'API)
-│   └── utils.py
-├── api/                      # API FastAPI (/health, /predict) + Dockerfile
-├── frontend/                 # interface web React (Vite) + Dockerfile
-├── models/                   # *.pt, model_V1.onnx (DVC, pas Git)
-├── reports/classification/                # matrices de confusion, Grad-CAM, drift, tableaux CSV, metriques.json
-├── configs/                  # config.yaml (chemins, classes, déploiement), param.yaml (hyperparamètres)
-├── tests/                    # pytest : prétraitement, modèle exporté, API
-├── dvc.yaml                  # pipeline reproductible : preparation → entrainement → evaluation
+│   ├── data/                 # chargement, dédoublonnage, contrôles, création du jeu de détection
+│   ├── features/             # prétraitement (feature_extraction.py), auto-annotation (auto_annotate.py)
+│   ├── models/               # architectures.py, train.py, evaluate.py, predict.py, train_yolo.py
+│   └── utils.py              # chemins, configs, graine, chargement du .env
+├── tests/                    # pytest : prétraitement, détection, modèle exporté, API
+├── .env.example              # variables MLflow / équipe à copier dans .env (secrets à remplir localement)
+├── dvc.yaml, dvc.lock        # pipeline reproductible (DVC)
 ├── docker-compose.yml        # API + interface
-├── .github/workflows/ci.yml  # tests + build interface + build image API à chaque push / PR
-├── mlflow.db                 # suivi des expériences MLflow
 ├── requirements.txt          # environnement complet (entraînement, API, tests)
 ├── requirements-api.txt      # dépendances minimales de l'image Docker de l'API
 └── README.md
@@ -111,6 +118,30 @@ pip install -r requirements.txt
 
 ---
 
+## 🔐 Mise en place (équipe)
+
+Le suivi MLflow et le stockage DVC sont sur DagsHub. Les identifiants ne sont jamais versionnés :
+ils restent dans `.env` et `.dvc/config.local`, tous deux ignorés par Git.
+
+```bash
+git clone https://github.com/Wahbijn/projet-olivier.git
+cd projet-olivier
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+copy .env.example .env                  # puis renseigner MLFLOW_TRACKING_USERNAME, MLFLOW_TRACKING_PASSWORD, TEAM_MEMBER
+dvc remote modify origin --local auth basic
+dvc remote modify origin --local user <identifiant-dagshub>
+dvc remote modify origin --local password <jeton-dagshub>
+dvc pull                                # le remote origin est déjà défini dans .dvc/config
+pytest
+```
+
+Le remote est `https://dagshub.com/olive-cad-team/projet-olivier.dvc`.
+
+---
+
 ## 🚀 Utilisation
 
 ### Pipeline complet (DVC)
@@ -153,13 +184,8 @@ docker compose up --build           # API : http://localhost:8000  |  interface 
 pytest -v       # les tests qui ont besoin de models/model_V1.pt sont ignorés s'il est absent
 ```
 
-**Consulter les expériences MLflow :**
-
-```bash
-mlflow ui --backend-store-uri sqlite:///mlflow.db
-```
-
-Ouvrir ensuite http://127.0.0.1:5000 dans le navigateur. Deux expériences :
+**Consulter les expériences MLflow :** le serveur est celui défini par `MLFLOW_TRACKING_URI` dans `.env`
+(DagsHub). Deux expériences :
 
 - `olive-disease` : les 4 runs historiques du notebook Kaggle (métriques et courbes) ;
 - `olive-disease-pipeline` : les runs lancés par `src/models/train.py`, avec la version du découpage
