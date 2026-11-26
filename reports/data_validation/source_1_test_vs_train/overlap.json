@@ -1,10 +1,11 @@
 {
-  "dossier_a": "data/raw/source_1/Zeytin_224x224_Augmented/test",
-  "dossier_b": "data/raw/source_1/Zeytin_224x224_Augmented/train",
-  "n_a": 970,
+  "methode": "resnet18_leaf_embeddings",
+  "dossier_a": "D:/dev/data_archive/source_1/Zeytin_224x224_Augmented/test",
+  "dossier_b": "D:/dev/data_archive/source_1/Zeytin_224x224_Augmented/train",
+  "n_a": 500,
   "n_b": 5011,
-  "taux_identiques": 0.42061855670103093,
-  "taux_proches": 0.9896907216494846,
-  "distance_mediane": 8.0,
-  "verdict": "copies_ou_augmentations"
+  "seuil_similarite": 0.9844,
+  "taux_meme_feuille": 0.036,
+  "similarite_mediane": 0.9662507772445679,
+  "verdict": "ok"
 }

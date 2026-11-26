@@ -1,4 +1,5 @@
 {
+  "methode": "resnet18_leaf_embeddings",
   "dossier_a": "data/processed/yolo/images/test",
   "dossier_b": "data/processed/yolo/images/train",
   "n_a": 326,

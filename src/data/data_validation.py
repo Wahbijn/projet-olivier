@@ -54,6 +54,7 @@ def comparer(dossier_a, dossier_b, seuil, max_images=0, n_exemples=20, sortie=No
     sim = S[np.arange(len(A)), j]
 
     resume = {
+        "methode": "resnet18_leaf_embeddings",
         "dossier_a": str(dossier_a), "dossier_b": str(dossier_b), "n_a": len(A), "n_b": len(B),
         "seuil_similarite": seuil,
         "taux_meme_feuille": float(np.mean(sim >= seuil)),

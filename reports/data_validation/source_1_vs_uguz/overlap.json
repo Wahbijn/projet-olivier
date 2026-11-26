@@ -1,10 +1,11 @@
 {
-  "dossier_a": "data/raw/source_1",
+  "methode": "resnet18_leaf_embeddings",
+  "dossier_a": "D:/dev/data_archive/source_1",
   "dossier_b": "data/raw/uguz",
   "n_a": 1000,
   "n_b": 3400,
-  "taux_identiques": 0.184,
-  "taux_proches": 0.602,
-  "distance_mediane": 12.0,
-  "verdict": "peu_de_chevauchement"
+  "seuil_similarite": 0.9844,
+  "taux_meme_feuille": 0.019,
+  "similarite_mediane": 0.9441959857940674,
+  "verdict": "ok"
 }
